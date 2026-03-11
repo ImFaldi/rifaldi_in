@@ -20,6 +20,7 @@ import { StatsGrid } from "@/components/ui/StatsGrid";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { CertSection } from "@/components/sections/CertSection";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { SOCIAL } from "@/lib/social";
 
 // ─── Static project metadata (non-translatable fields) ───────────────────────
 type ProjectMeta = Omit<Project, "title" | "description">;
@@ -105,11 +106,11 @@ export default function HomePage() {
           transition={{ duration: 0.5 }}
           className="flex items-center gap-3"
         >
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+          <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer"
             aria-label="GitHub" className="text-text-secondary hover:text-accent transition-colors">
             <Github size={18} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+          <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer"
             aria-label="LinkedIn" className="text-text-secondary hover:text-accent transition-colors">
             <Linkedin size={18} />
           </a>
@@ -196,7 +197,7 @@ export default function HomePage() {
             {/* Social links */}
             <motion.div custom={5} variants={fadeUp} className="flex items-center gap-5">
               <a
-                href="https://github.com"
+                href={SOCIAL.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
@@ -205,7 +206,7 @@ export default function HomePage() {
               </a>
               <span className="text-border">·</span>
               <a
-                href="https://linkedin.com"
+                href={SOCIAL.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
@@ -228,15 +229,7 @@ export default function HomePage() {
 
               {/* Photo frame */}
               <div className="relative z-10 w-72 h-80 sm:w-80 sm:h-96 rounded-3xl overflow-hidden border border-border glass-card">
-                {/*
-                  ── Untuk menggunakan foto nyata ──────────────────────
-                  1. Letakkan foto di: /public/images/profile.jpg
-                  2. Uncomment blok Image di bawah ini
-                  3. Hapus blok "initials placeholder" di bawah
-                  ─────────────────────────────────────────────────────
-                  import Image from "next/image";
-                  */}
-                  
+
                   <Image
                     src="/images/profile.jpg"
                     alt="Rifaldi"
@@ -255,7 +248,7 @@ export default function HomePage() {
                   {/* Bottom overlay */}
                   <div className="absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-black/50 to-transparent" />
                   <div className="absolute bottom-5 left-0 right-0 text-center">
-                    <p className="text-white font-bold text-sm drop-shadow">Rifaldi</p>
+                    <p className="text-white font-bold text-sm drop-shadow">Rifaldi Indrajaya S.Kom</p>
                     <p className="text-white/65 text-xs drop-shadow">Full Stack Developer</p>
                   </div>
                 </div>
@@ -342,7 +335,7 @@ export default function HomePage() {
             </h2>
           </div>
           <a
-            href="https://github.com"
+            href={SOCIAL.github}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:gap-3 transition-all duration-200 shrink-0"
@@ -446,14 +439,14 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col gap-3 mt-6">
                 <a
-                  href="mailto:rifaldi@example.com"
+                  href={SOCIAL.mailto}
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-accent text-white hover:opacity-90 transition-opacity"
                 >
                   <Mail size={15} />
                   {t.contact.emailBtn}
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href={SOCIAL.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border border-border text-text-primary hover:bg-accent-soft transition-colors"
@@ -480,11 +473,11 @@ export default function HomePage() {
             © {new Date().getFullYear()} Rifaldi — {t.footer.credit}
           </p>
           <div className="flex items-center gap-4">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+            <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer"
               className="text-text-secondary hover:text-accent transition-colors">
               <Github size={16} />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+            <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer"
               className="text-text-secondary hover:text-accent transition-colors">
               <Linkedin size={16} />
             </a>
