@@ -35,10 +35,10 @@ export function MagneticButton({ children, className = "", onClick }: MagneticBu
       className={[
         "relative inline-flex items-center justify-center gap-2",
         "px-6 py-3 rounded-xl font-semibold text-sm",
-        "bg-[var(--accent)] text-white",
+        "bg-accent text-white",
         "hover:opacity-90 active:scale-95",
         "transition-opacity duration-200",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
         className,
       ].join(" ")}
     >

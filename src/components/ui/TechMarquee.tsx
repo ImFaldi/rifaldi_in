@@ -20,9 +20,9 @@ export function TechMarquee() {
   return (
     <div className="relative w-full overflow-hidden py-2 select-none">
       {/* Left fade */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 z-10 bg-gradient-to-r from-[var(--bg-primary)] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 z-10 bg-linear-to-r from-bg-primary to-transparent" />
       {/* Right fade */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 z-10 bg-gradient-to-l from-[var(--bg-primary)] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 z-10 bg-linear-to-l from-bg-primary to-transparent" />
 
       <div className="animate-marquee flex gap-4" style={{ width: "max-content" }}>
         {ITEMS.map((tech, i) => (
@@ -33,7 +33,7 @@ export function TechMarquee() {
             className="flex items-center gap-2 px-4 py-2 rounded-xl glass-card whitespace-nowrap cursor-default"
           >
             <span className="text-xl leading-none">{tech.emoji}</span>
-            <span className="text-sm font-semibold text-[var(--text-primary)]">
+            <span className="text-sm font-semibold text-text-primary">
               {tech.name}
             </span>
           </motion.div>

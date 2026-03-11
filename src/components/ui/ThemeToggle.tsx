@@ -30,7 +30,7 @@ export function ThemeToggle() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="absolute"
           >
-            <Moon size={18} className="text-[var(--accent)]" />
+            <Moon size={18} className="text-accent" />
           </motion.span>
         ) : (
           <motion.span
@@ -41,7 +41,7 @@ export function ThemeToggle() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="absolute"
           >
-            <Sun size={18} className="text-[var(--accent)]" />
+            <Sun size={18} className="text-accent" />
           </motion.span>
         )}
       </AnimatePresence>

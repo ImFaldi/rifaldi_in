@@ -52,10 +52,10 @@ export function StatsGrid() {
           transition={{ delay: i * 0.08, duration: 0.5, ease: "backOut" }}
           className="glass-card rounded-xl p-4 flex flex-col justify-between"
         >
-          <p className="text-[var(--text-secondary)] text-xs font-medium leading-snug">
+          <p className="text-text-secondary text-xs font-medium leading-snug">
             {stat.label}
           </p>
-          <p className="text-[var(--accent)] text-2xl font-extrabold mt-2 tabular-nums">
+          <p className="text-accent text-2xl font-extrabold mt-2 tabular-nums">
             <AnimatedNumber {...stat} />
           </p>
         </motion.div>

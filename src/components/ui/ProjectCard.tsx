@@ -69,7 +69,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         className="glass-card rounded-2xl overflow-hidden group cursor-pointer h-full"
       >
         {/* Gradient Banner */}
-        <div className={`h-36 w-full bg-gradient-to-br ${project.gradient} relative`}>
+        <div className={`h-36 w-full bg-linear-to-br ${project.gradient} relative`}>
           {/* Glare overlay */}
           <motion.div
             className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
@@ -91,10 +91,10 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
         {/* Content */}
         <div className="p-5 flex flex-col gap-3" style={{ transform: "translateZ(20px)" }}>
-          <h3 className="text-[var(--text-primary)] font-bold text-lg leading-tight">
+          <h3 className="text-text-primary font-bold text-lg leading-tight">
             {project.title}
           </h3>
-          <p className="text-[var(--text-secondary)] text-sm leading-relaxed line-clamp-2">
+          <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">
             {project.description}
           </p>
 
@@ -103,7 +103,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-[var(--accent-soft)] text-[var(--accent)] border border-[var(--border-color)]"
+                className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-accent-soft text-accent border border-border"
               >
                 {tag}
               </span>
@@ -117,7 +117,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 href={project.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-[var(--accent)] font-semibold hover:underline"
+                className="flex items-center gap-1.5 text-xs text-accent font-semibold hover:underline"
               >
                 <ExternalLink size={13} />
                 Live Demo
@@ -128,7 +128,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 href={project.repo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] font-semibold hover:text-[var(--accent)] transition-colors"
+                className="flex items-center gap-1.5 text-xs text-text-secondary font-semibold hover:text-accent transition-colors"
               >
                 <Github size={13} />
                 Source
