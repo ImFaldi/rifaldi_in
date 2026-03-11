@@ -87,15 +87,6 @@ body {
   border-radius: 99px;
 }
 
-/* ─── Infinite Marquee ───────────────────────────────────────── */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.animate-marquee {
-  animation: marquee 24s linear infinite;
-}
-.animate-marquee:hover { animation-play-state: paused; }
 
 /* ─── Float Animation ────────────────────────────────────────── */
 @keyframes float {
