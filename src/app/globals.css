@@ -50,8 +50,12 @@ body {
   color: var(--text-primary);
   font-family: var(--font-geist-sans, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
-  cursor: none; /* replaced by custom cursor */
   overflow-x: hidden;
+}
+
+/* Custom cursor hanya aktif di device non-touch (mouse/trackpad) */
+@media (pointer: fine) {
+  body { cursor: none; }
 }
 
 /* ─── Custom Cursor ──────────────────────────────────────────── */
