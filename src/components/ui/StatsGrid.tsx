@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Stat {
   label: string;
@@ -33,14 +34,19 @@ function AnimatedNumber({ value, suffix = "", prefix = "" }: Stat) {
   );
 }
 
-const STATS: Stat[] = [
-  { label: "Coding Focus Score",   value: 100, suffix: "%" },
-  { label: "Projects Shipped",     value: 24 },
-  { label: "Cups of Coffee",       value: 512, suffix: "+" },
-  { label: "GitHub Contributions", value: 1_420, prefix: "" },
+const STAT_VALUES = [
+  { value: 100, suffix: "%" },
+  { value: 24 },
+  { value: 512, suffix: "+" },
+  { value: 1_420 },
 ];
 
 export function StatsGrid() {
+  const { t } = useLanguage();
+  const STATS: Stat[] = STAT_VALUES.map((s, i) => ({
+    label: t.statsGrid.labels[i] ?? "",
+    ...s,
+  }));
   return (
     <div className="grid grid-cols-2 gap-3">
       {STATS.map((stat, i) => (

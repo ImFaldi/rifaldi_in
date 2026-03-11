@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Award, ExternalLink } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CERTS = [
   {
@@ -67,6 +68,7 @@ const CERTS = [
 ];
 
 export function CertSection() {
+  const { t } = useLanguage();
   return (
     <section id="sertifikasi" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Header */}
@@ -78,10 +80,10 @@ export function CertSection() {
         className="mb-14"
       >
         <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">
-          Kemampuan Terverifikasi
+          {t.certs.subheader}
         </p>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary">
-          Sertifikasi
+          {t.certs.header}
         </h2>
       </motion.div>
 
@@ -120,7 +122,7 @@ export function CertSection() {
                 <Award size={11} className="text-accent" />
                 {cert.date}
               </span>
-              <span className="text-xs font-mono text-text-secondary opacity-50 truncate max-w-[110px]">
+              <span className="text-xs font-mono text-text-secondary opacity-50 truncate max-w-27.5">
                 {cert.credentialId}
               </span>
             </div>

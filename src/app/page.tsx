@@ -11,51 +11,32 @@ import {
   Code2,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ProjectCard, type Project } from "@/components/ui/ProjectCard";
 import { TechMarquee } from "@/components/ui/TechMarquee";
 import { StatsGrid } from "@/components/ui/StatsGrid";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { CertSection } from "@/components/sections/CertSection";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-const NAV_LINKS = [
-  { label: "Proyek",      href: "#proyek" },
-  { label: "Pengalaman",  href: "#pengalaman" },
-  { label: "Sertifikasi", href: "#sertifikasi" },
-  { label: "Kontak",      href: "#kontak" },
-];
+// ─── Static project metadata (non-translatable fields) ───────────────────────
+type ProjectMeta = Omit<Project, "title" | "description">;
 
-const QUICK_STATS = [
-  { value: "5+",   label: "Tahun Pengalaman" },
-  { value: "24+",  label: "Proyek Selesai" },
-  { value: "18+",  label: "Klien Puas" },
-  { value: "1.4k+",label: "Kontribusi GitHub" },
-];
-
-const PROJECTS: Project[] = [
+const PROJECT_META: ProjectMeta[] = [
   {
-    title: "SaaSify Dashboard",
-    description:
-      "Platform manajemen SaaS real-time dengan analitik interaktif, role-based access control, dan integrasi payment gateway Midtrans.",
     tags: ["Next.js", "Laravel", "Tailwind", "MySQL"],
     href: "https://example.com",
     repo: "https://github.com",
     gradient: "from-violet-600 via-indigo-600 to-blue-600",
   },
   {
-    title: "NutriTrack Mobile",
-    description:
-      "Aplikasi pelacak nutrisi berbasis Flutter dengan AI meal recognition, integrasi dengan wearables, dan dashboard kesehatan harian.",
     tags: ["Flutter", "Firebase", "TensorFlow Lite"],
     href: undefined,
     repo: "https://github.com",
     gradient: "from-emerald-500 via-teal-500 to-cyan-500",
   },
   {
-    title: "AI Document Agent",
-    description:
-      "Agen AI multi-step yang dapat membaca, meringkas, dan menjawab pertanyaan dari dokumen PDF panjang menggunakan RAG pipeline.",
     tags: ["LangChain", "Express.js", "Pinecone", "OpenAI"],
     href: "https://example.com",
     repo: undefined,
@@ -75,6 +56,13 @@ const fadeUp = {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
+  const { t } = useLanguage();
+
+  const projects: Project[] = t.projects.list.map((p, i) => ({
+    ...p,
+    ...PROJECT_META[i],
+  }));
+
   return (
     <main className="min-h-screen bg-bg-primary">
 
@@ -99,7 +87,7 @@ export default function HomePage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="hidden md:flex items-center gap-7"
         >
-          {NAV_LINKS.map((link) => (
+          {t.nav.links.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -124,6 +112,7 @@ export default function HomePage() {
             aria-label="LinkedIn" className="text-text-secondary hover:text-accent transition-colors">
             <Linkedin size={18} />
           </a>
+          <LanguageToggle />
           <ThemeToggle />
         </motion.div>
       </nav>
@@ -150,7 +139,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border border-border text-xs font-semibold text-accent mb-6"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Available for freelance &amp; full-time
+              {t.hero.availableBadge}
             </motion.div>
 
             <motion.h1
@@ -158,10 +147,10 @@ export default function HomePage() {
               variants={fadeUp}
               className="text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-[1.1] tracking-tight text-text-primary mb-4"
             >
-              Hi, saya{" "}
+              {t.hero.greeting}{" "}
               <span className="gradient-text">Rifaldi</span>
               <br />
-              Full Stack Developer.
+              {t.hero.role}
             </motion.h1>
 
             <motion.div
@@ -171,12 +160,12 @@ export default function HomePage() {
             >
               <span className="flex items-center gap-1.5">
                 <MapPin size={13} className="text-accent shrink-0" />
-                Jakarta, Indonesia
+                {t.hero.location}
               </span>
               <span className="opacity-30">·</span>
               <span className="flex items-center gap-1.5">
                 <Code2 size={13} className="text-accent shrink-0" />
-                Laravel · Next.js · Flutter · AI Agents
+                {t.hero.tech}
               </span>
             </motion.div>
 
@@ -185,15 +174,13 @@ export default function HomePage() {
               variants={fadeUp}
               className="text-text-secondary text-base leading-relaxed mb-8 max-w-lg"
             >
-              Saya membangun produk digital yang cepat, indah, dan berdampak.
-              Spesialis memadukan keahlian backend, frontend, mobile, dan
-              kecerdasan buatan menjadi satu solusi yang kohesif dan scalable.
+              {t.hero.bio}
             </motion.p>
 
             <motion.div custom={4} variants={fadeUp} className="flex flex-wrap gap-3 mb-8">
               <MagneticButton>
                 <Mail size={15} />
-                Hubungi Saya
+                {t.hero.ctaContact}
               </MagneticButton>
               <a
                 href="/cv.pdf"
@@ -201,7 +188,7 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border border-border text-text-primary hover:bg-accent-soft transition-colors"
               >
                 <Download size={15} />
-                Download CV
+                {t.hero.ctaCV}
               </a>
             </motion.div>
 
@@ -280,7 +267,7 @@ export default function HomePage() {
               >
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs font-bold text-text-primary">Available</span>
+                  <span className="text-xs font-bold text-text-primary">{t.hero.floatingAvailable}</span>
                 </div>
               </motion.div>
 
@@ -290,8 +277,8 @@ export default function HomePage() {
                 transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
                 className="absolute -bottom-4 -left-4 z-20 glass-card rounded-xl px-3 py-2 border border-border"
               >
-                <p className="text-xs font-medium text-text-secondary">Pengalaman</p>
-                <p className="text-sm font-extrabold text-accent">5+ Tahun</p>
+                <p className="text-xs font-medium text-text-secondary">{t.hero.floatingExp}</p>
+                <p className="text-sm font-extrabold text-accent">{t.hero.floatingExpValue}</p>
               </motion.div>
             </div>
           </motion.div>
@@ -303,7 +290,7 @@ export default function HomePage() {
       {/* ╚══════════════════════════════════════════════════════╝ */}
       <div className="border-y border-border bg-(--bg-card)/30 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {QUICK_STATS.map((stat, i) => (
+          {t.stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 12 }}
@@ -346,10 +333,10 @@ export default function HomePage() {
         >
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">
-              Karya Terpilih
+              {t.projects.subheader}
             </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary">
-              Featured Projects
+              {t.projects.header}
             </h2>
           </div>
           <a
@@ -358,12 +345,12 @@ export default function HomePage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:gap-3 transition-all duration-200 shrink-0"
           >
-            Lihat Semua <ArrowUpRight size={15} />
+            {t.projects.viewAll} <ArrowUpRight size={15} />
           </a>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((project, i) => (
+          {projects.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />
           ))}
         </div>
@@ -397,7 +384,7 @@ export default function HomePage() {
               className="glass-card rounded-2xl p-6 overflow-hidden self-start border border-border"
             >
               <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-5">
-                Deep-Work Stats
+                {t.deepWork.label}
               </p>
               <StatsGrid />
             </motion.div>
@@ -412,20 +399,19 @@ export default function HomePage() {
             >
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-3">
-                  About Me
+                  {t.about.label}
                 </p>
                 <h2 className="text-xl font-bold text-text-primary mb-3">
-                  Terobsesi dengan{" "}
-                  <span className="gradient-text">craft</span> &amp; impact.
+                  {t.about.headline}{" "}
+                  <span className="gradient-text">{t.about.headlineHighlight}</span>{" "}
+                  {t.about.headlineEnd}
                 </h2>
                 <p className="text-text-secondary text-sm leading-relaxed">
-                  Dengan pengalaman end-to-end dari backend hingga mobile, saya
-                  memadukan keahlian teknis dengan sensibilitas desain untuk
-                  menciptakan produk yang berkesan dan berdampak nyata bagi pengguna.
+                  {t.about.bio}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 mt-auto">
-                {["Problem Solver", "Clean Code", "Design-Minded", "AI Enthusiast"].map((tag) => (
+                {t.about.tags.map((tag) => (
                   <span
                     key={tag}
                     className="px-3 py-1 rounded-full text-xs font-semibold glass-card border border-border text-text-secondary"
@@ -447,13 +433,13 @@ export default function HomePage() {
             >
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-3">
-                  Let&apos;s Work Together
+                  {t.contact.label}
                 </p>
                 <h2 className="text-xl font-bold text-text-primary leading-snug mb-3">
-                  Punya proyek impian? Mari wujudkan bersama.
+                  {t.contact.headline}
                 </h2>
                 <p className="text-text-secondary text-sm leading-relaxed">
-                  Terbuka untuk proyek freelance, full-time, atau kolaborasi menarik lainnya.
+                  {t.contact.bio}
                 </p>
               </div>
               <div className="flex flex-col gap-3 mt-6">
@@ -462,7 +448,7 @@ export default function HomePage() {
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-accent text-white hover:opacity-90 transition-opacity"
                 >
                   <Mail size={15} />
-                  Kirim Email
+                  {t.contact.emailBtn}
                 </a>
                 <a
                   href="https://linkedin.com"
@@ -471,7 +457,7 @@ export default function HomePage() {
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border border-border text-text-primary hover:bg-accent-soft transition-colors"
                 >
                   <Linkedin size={15} />
-                  LinkedIn
+                  {t.contact.linkedinBtn}
                 </a>
               </div>
             </motion.div>
@@ -489,7 +475,7 @@ export default function HomePage() {
             rifaldi<span className="text-accent">.</span>
           </span>
           <p className="text-xs text-text-secondary text-center">
-            © {new Date().getFullYear()} Rifaldi — Dibuat dengan Next.js 15, Tailwind CSS &amp; Framer Motion.
+            © {new Date().getFullYear()} Rifaldi — {t.footer.credit}
           </p>
           <div className="flex items-center gap-4">
             <a href="https://github.com" target="_blank" rel="noopener noreferrer"

@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
@@ -28,9 +29,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-      <CustomCursor />
-      {children}
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <CustomCursor />
+        {children}
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }

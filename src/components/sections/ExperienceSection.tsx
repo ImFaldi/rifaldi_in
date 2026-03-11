@@ -2,39 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Briefcase, MapPin } from "lucide-react";
-
-const EXPERIENCES = [
-  {
-    role: "Full Stack Developer",
-    company: "PT. Solusi Digital Nusantara",
-    location: "Jakarta, Indonesia",
-    period: "Jan 2024 – Sekarang",
-    type: "Full-time",
-    description:
-      "Memimpin pengembangan platform SaaS multi-tenant berbasis Next.js & Laravel. Mengintegrasikan fitur AI menggunakan OpenAI API untuk otomatisasi laporan keuangan. Berhasil meningkatkan performa API sebesar 60% melalui query optimization dan Redis caching strategy.",
-    tags: ["Next.js", "Laravel", "OpenAI", "Redis", "MySQL"],
-  },
-  {
-    role: "Mobile Developer",
-    company: "PT. Kreasi Teknologi Indonesia",
-    location: "Bandung, Indonesia",
-    period: "Jun 2022 – Des 2023",
-    type: "Full-time",
-    description:
-      "Mengembangkan 3 aplikasi mobile cross-platform untuk sektor kesehatan dan logistik menggunakan Flutter. Menerapkan Clean Architecture + BLoC pattern. Rating 4.8/5 di Play Store dengan 50.000+ downloads aktif.",
-    tags: ["Flutter", "Dart", "Firebase", "BLoC", "REST API"],
-  },
-  {
-    role: "Junior Web Developer",
-    company: "Freelance / Remote",
-    location: "Remote",
-    period: "Mar 2021 – Mei 2022",
-    type: "Freelance",
-    description:
-      "Menangani 15+ proyek web development untuk klien dalam dan luar negeri, mulai dari company profiles, e-commerce, hingga sistem informasi manajemen berbasis Laravel & Vue.js.",
-    tags: ["Laravel", "Vue.js", "PHP", "MySQL", "Bootstrap"],
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -50,6 +18,8 @@ const fadeUp = {
 };
 
 export function ExperienceSection() {
+  const { t } = useLanguage();
+  const EXPERIENCES = t.experience.list;
   return (
     <section id="pengalaman" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Header */}
@@ -61,10 +31,10 @@ export function ExperienceSection() {
         className="mb-14"
       >
         <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">
-          Perjalanan Karir
+          {t.experience.subheader}
         </p>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary">
-          Pengalaman Kerja
+          {t.experience.header}
         </h2>
       </motion.div>
 
