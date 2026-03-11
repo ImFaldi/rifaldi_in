@@ -59,16 +59,16 @@ const fadeUp = {
 // ─── Component ────────────────────────────────────────────────────────────
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[var(--bg-primary)]">
+    <main className="min-h-screen bg-bg-primary">
       {/* ── Navbar ────────────────────────────────────────── */}
-      <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md border-b border-[var(--border-color)] bg-[var(--bg-primary)]/80">
+      <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md border-b border-border bg-(--bg-primary)/80">
         <motion.span
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="font-bold text-[var(--text-primary)] text-lg tracking-tight"
+          className="font-bold text-text-primary text-lg tracking-tight"
         >
-          rifaldi<span className="text-[var(--accent)]">.</span>
+          rifaldi<span className="text-accent">.</span>
         </motion.span>
 
         <motion.div
@@ -81,7 +81,7 @@ export default function HomePage() {
             href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+            className="text-text-secondary hover:text-accent transition-colors"
             aria-label="GitHub"
           >
             <Github size={18} />
@@ -90,7 +90,7 @@ export default function HomePage() {
             href="https://linkedin.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+            className="text-text-secondary hover:text-accent transition-colors"
             aria-label="LinkedIn"
           >
             <Linkedin size={18} />
@@ -111,7 +111,7 @@ export default function HomePage() {
           <motion.div
             custom={0}
             variants={fadeUp}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border border-[var(--border-color)] text-xs font-semibold text-[var(--accent)] mb-5"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border border-border text-xs font-semibold text-accent mb-5"
           >
             <Sparkles size={12} />
             Available for freelance projects
@@ -120,7 +120,7 @@ export default function HomePage() {
           <motion.h1
             custom={1}
             variants={fadeUp}
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight text-[var(--text-primary)] mb-5"
+            className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight text-text-primary mb-5"
           >
             Building digital products{" "}
             <span className="gradient-text">that matter.</span>
@@ -129,9 +129,9 @@ export default function HomePage() {
           <motion.p
             custom={2}
             variants={fadeUp}
-            className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8"
+            className="text-text-secondary text-lg leading-relaxed mb-8"
           >
-            Hi, saya <strong className="text-[var(--text-primary)]">Rifaldi</strong> — Full Stack &amp; Mobile Developer
+            Hi, saya <strong className="text-text-primary">Rifaldi</strong> — Full Stack &amp; Mobile Developer
             yang spesialis di Laravel, Next.js, Flutter, dan AI Agents. Saya
             membangun aplikasi yang cepat, indah, dan berdampak.
           </motion.p>
@@ -144,7 +144,7 @@ export default function HomePage() {
             <a
               href="/cv.pdf"
               download
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--accent-soft)] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border border-border text-text-primary hover:bg-accent-soft transition-colors"
             >
               <Download size={15} />
               Download CV
@@ -164,7 +164,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="col-span-full glass-card rounded-2xl p-5"
           >
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-secondary)] mb-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-4">
               Tech Stack
             </p>
             <TechMarquee />
@@ -184,7 +184,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="glass-card rounded-2xl p-5"
           >
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-secondary)] mb-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-4">
               Deep-Work Stats
             </p>
             <StatsGrid />
@@ -200,13 +200,13 @@ export default function HomePage() {
             className="md:col-span-2 glass-card rounded-2xl p-7 flex flex-col justify-between gap-6"
           >
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-secondary)] mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-3">
                 About Me
               </p>
-              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3">
+              <h2 className="text-xl font-bold text-text-primary mb-3">
                 Seorang developer yang terobsesi dengan <span className="gradient-text">craft</span> &amp; kualitas.
               </h2>
-              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+              <p className="text-text-secondary text-sm leading-relaxed">
                 Dengan pengalaman membangun produk dari nol hingga production,
                 saya menggabungkan keahlian teknis (backend, frontend, mobile)
                 dengan sensibilitas desain untuk menciptakan pengalaman pengguna
@@ -219,7 +219,7 @@ export default function HomePage() {
                 (tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-full text-xs font-semibold glass-card border border-[var(--border-color)] text-[var(--text-secondary)]"
+                    className="px-3 py-1 rounded-full text-xs font-semibold glass-card border border-border text-text-secondary"
                   >
                     {tag}
                   </span>
@@ -235,19 +235,19 @@ export default function HomePage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="glass-card rounded-2xl p-7 flex flex-col justify-between bg-gradient-to-br from-[var(--accent)]/10 to-transparent"
+            className="glass-card rounded-2xl p-7 flex flex-col justify-between bg-linear-to-br from-(--accent)/10 to-transparent"
           >
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-secondary)] mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-3">
                 Let&apos;s Work Together
               </p>
-              <h2 className="text-lg font-bold text-[var(--text-primary)] leading-snug mb-3">
+              <h2 className="text-lg font-bold text-text-primary leading-snug mb-3">
                 Punya proyek impian? Mari wujudkan bersama.
               </h2>
             </div>
             <a
               href="mailto:rifaldi@example.com"
-              className="inline-flex items-center gap-2 text-sm font-bold text-[var(--accent)] hover:gap-3 transition-all duration-200"
+              className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:gap-3 transition-all duration-200"
             >
               Kirim pesan <ArrowUpRight size={16} />
             </a>
@@ -256,8 +256,8 @@ export default function HomePage() {
       </section>
 
       {/* ── Footer ─────────────────────────────────────────── */}
-      <footer className="border-t border-[var(--border-color)] py-8 px-6 text-center">
-        <p className="text-xs text-[var(--text-secondary)]">
+      <footer className="border-t border-border py-8 px-6 text-center">
+        <p className="text-xs text-text-secondary">
           © {new Date().getFullYear()} Rifaldi — Dibuat dengan Next.js 15, Tailwind CSS &amp; Framer Motion.
         </p>
       </footer>
