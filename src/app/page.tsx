@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
   ArrowUpRight,
   Mail,
@@ -234,6 +235,8 @@ export default function HomePage() {
                   3. Hapus blok "initials placeholder" di bawah
                   ─────────────────────────────────────────────────────
                   import Image from "next/image";
+                  */}
+                  
                   <Image
                     src="/images/profile.jpg"
                     alt="Rifaldi"
@@ -241,7 +244,6 @@ export default function HomePage() {
                     className="object-cover object-top"
                     priority
                   />
-                */}
 
                 {/* Initials placeholder (hapus jika sudah pakai foto nyata) */}
                 <div className="w-full h-full bg-linear-to-br from-accent/25 via-violet-500/15 to-transparent relative">
