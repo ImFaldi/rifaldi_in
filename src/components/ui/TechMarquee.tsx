@@ -6,7 +6,6 @@ const TECHS = [
   { name: "Laravel",   emoji: "🔴" },
   { name: "React",     emoji: "⚛️" },
   { name: "Next.js",   emoji: "▲" },
-  { name: "Flutter",   emoji: "💙" },
   { name: "Express",   emoji: "🟩" },
   { name: "AI Agents", emoji: "🤖" },
   { name: "TypeScript",emoji: "🔷" },

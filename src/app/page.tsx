@@ -131,8 +131,8 @@ export default function HomePage() {
             variants={fadeUp}
             className="text-text-secondary text-lg leading-relaxed mb-8"
           >
-            Hi, saya <strong className="text-text-primary">Rifaldi</strong> — Full Stack &amp; Mobile Developer
-            yang spesialis di Laravel, Next.js, Flutter, dan AI Agents. Saya
+            Hi, saya <strong className="text-text-primary">Rifaldi</strong> — Full Stack Developer
+            yang spesialis di Laravel, Next.js, dan AI Agents. Saya
             membangun aplikasi yang cepat, indah, dan berdampak.
           </motion.p>
 
@@ -182,7 +182,7 @@ export default function HomePage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="glass-card rounded-2xl p-5"
+            className="glass-card rounded-2xl p-5 overflow-hidden self-start"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-text-secondary mb-4">
               Deep-Work Stats

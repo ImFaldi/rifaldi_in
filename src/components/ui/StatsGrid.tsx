@@ -42,7 +42,7 @@ const STATS: Stat[] = [
 
 export function StatsGrid() {
   return (
-    <div className="grid grid-cols-2 gap-3 h-full">
+    <div className="grid grid-cols-2 gap-3">
       {STATS.map((stat, i) => (
         <motion.div
           key={stat.label}
