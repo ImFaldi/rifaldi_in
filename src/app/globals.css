@@ -1,26 +1,107 @@
 @import "tailwindcss";
 
+/* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light Mode */
+  --bg-primary:      #F8FAFC;
+  --bg-card:         #FFFFFF;
+  --border-color:    #E2E8F0;
+  --text-primary:    #1E293B;
+  --text-secondary:  #475569;
+  --accent:          #1D4ED8;
+  --accent-soft:     #DBEAFE;
+  --shadow-card:     0 4px 24px rgba(30, 41, 59, 0.08);
+  --cursor-color:    #1D4ED8;
+}
+
+.dark {
+  /* Dark Mode */
+  --bg-primary:      #050505;
+  --bg-card:         rgba(255, 255, 255, 0.04);
+  --border-color:    rgba(255, 255, 255, 0.1);
+  --text-primary:    #F1F5F9;
+  --text-secondary:  #94A3B8;
+  --accent:          #6366f1;
+  --accent-soft:     rgba(99, 102, 241, 0.15);
+  --shadow-card:     0 4px 24px rgba(0, 0, 0, 0.4);
+  --cursor-color:    #6366f1;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-primary:     var(--bg-primary);
+  --color-bg-card:        var(--bg-card);
+  --color-border:         var(--border-color);
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent:         var(--accent);
+  --color-accent-soft:    var(--accent-soft);
+  /* Fixed palette */
+  --color-indigo-500:     #6366f1;
+  --color-cobalt-700:     #1D4ED8;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ─── Base Styles ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans, system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  cursor: none; /* replaced by custom cursor */
+  overflow-x: hidden;
 }
+
+/* ─── Custom Cursor ──────────────────────────────────────────── */
+#custom-cursor {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+/* ─── Glassmorphism Card ────────────────────────────────────── */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+}
+
+/* ─── Gradient Text ─────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 99px;
+}
+
+/* ─── Infinite Marquee ───────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 24s linear infinite;
+}
+.animate-marquee:hover { animation-play-state: paused; }
+
+/* ─── Float Animation ────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+/* ─── Fade-in Stagger handled by Framer Motion ───────────────── */
