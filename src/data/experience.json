@@ -1,0 +1,32 @@
+[
+  {
+    "role": "Full Stack Developer",
+    "company": "PT. Solusi Digital Nusantara",
+    "location": "Jakarta, Indonesia",
+    "period": "Jan 2024 – Sekarang",
+    "type": "Full-time",
+    "description": "Memimpin pengembangan platform SaaS multi-tenant berbasis Next.js & Laravel. Mengintegrasikan fitur AI menggunakan OpenAI API untuk otomatisasi laporan keuangan. Berhasil meningkatkan performa API sebesar 60% melalui query optimization dan Redis caching strategy.",
+    "description_en": "Led development of a multi-tenant SaaS platform using Next.js & Laravel. Integrated AI features via OpenAI API to automate financial reporting. Improved API performance by 60% through query optimization and Redis caching strategy.",
+    "tags": ["Next.js", "Laravel", "OpenAI", "Redis", "MySQL"]
+  },
+  {
+    "role": "Mobile Developer",
+    "company": "PT. Kreasi Teknologi Indonesia",
+    "location": "Bandung, Indonesia",
+    "period": "Jun 2022 – Des 2023",
+    "type": "Full-time",
+    "description": "Mengembangkan 3 aplikasi mobile cross-platform untuk sektor kesehatan dan logistik menggunakan Flutter. Menerapkan Clean Architecture + BLoC pattern. Rating 4.8/5 di Play Store dengan 50.000+ downloads aktif.",
+    "description_en": "Developed 3 cross-platform mobile apps for healthcare and logistics using Flutter. Implemented Clean Architecture + BLoC pattern. Achieved 4.8/5 on the Play Store with 50,000+ active downloads.",
+    "tags": ["Flutter", "Dart", "Firebase", "BLoC", "REST API"]
+  },
+  {
+    "role": "Junior Web Developer",
+    "company": "Freelance / Remote",
+    "location": "Remote",
+    "period": "Mar 2021 – Mei 2022",
+    "type": "Freelance",
+    "description": "Menangani 15+ proyek web development untuk klien dalam dan luar negeri, mulai dari company profiles, e-commerce, hingga sistem informasi manajemen berbasis Laravel & Vue.js.",
+    "description_en": "Handled 15+ web development projects for local and international clients — from company profiles and e-commerce to management information systems built with Laravel & Vue.js.",
+    "tags": ["Laravel", "Vue.js", "PHP", "MySQL", "Bootstrap"]
+  }
+]

@@ -51,7 +51,6 @@ export interface Translations {
   experience: {
     subheader: string;
     header: string;
-    list: ExperienceEntry[];
   };
   certs: {
     subheader: string;
@@ -129,35 +128,6 @@ export const translations: Record<Lang, Translations> = {
     experience: {
       subheader: "Perjalanan Karir",
       header:    "Pengalaman Kerja",
-      list: [
-        {
-          role:        "Full Stack Developer",
-          company:     "PT. Solusi Digital Nusantara",
-          location:    "Jakarta, Indonesia",
-          period:      "Jan 2024 – Sekarang",
-          type:        "Full-time",
-          description: "Memimpin pengembangan platform SaaS multi-tenant berbasis Next.js & Laravel. Mengintegrasikan fitur AI menggunakan OpenAI API untuk otomatisasi laporan keuangan. Berhasil meningkatkan performa API sebesar 60% melalui query optimization dan Redis caching strategy.",
-          tags:        ["Next.js", "Laravel", "OpenAI", "Redis", "MySQL"],
-        },
-        {
-          role:        "Mobile Developer",
-          company:     "PT. Kreasi Teknologi Indonesia",
-          location:    "Bandung, Indonesia",
-          period:      "Jun 2022 – Des 2023",
-          type:        "Full-time",
-          description: "Mengembangkan 3 aplikasi mobile cross-platform untuk sektor kesehatan dan logistik menggunakan Flutter. Menerapkan Clean Architecture + BLoC pattern. Rating 4.8/5 di Play Store dengan 50.000+ downloads aktif.",
-          tags:        ["Flutter", "Dart", "Firebase", "BLoC", "REST API"],
-        },
-        {
-          role:        "Junior Web Developer",
-          company:     "Freelance / Remote",
-          location:    "Remote",
-          period:      "Mar 2021 – Mei 2022",
-          type:        "Freelance",
-          description: "Menangani 15+ proyek web development untuk klien dalam dan luar negeri, mulai dari company profiles, e-commerce, hingga sistem informasi manajemen berbasis Laravel & Vue.js.",
-          tags:        ["Laravel", "Vue.js", "PHP", "MySQL", "Bootstrap"],
-        },
-      ],
     },
     certs: {
       subheader: "Kemampuan Terverifikasi",
@@ -238,35 +208,6 @@ export const translations: Record<Lang, Translations> = {
     experience: {
       subheader: "Career Journey",
       header:    "Work Experience",
-      list: [
-        {
-          role:        "Full Stack Developer",
-          company:     "PT. Solusi Digital Nusantara",
-          location:    "Jakarta, Indonesia",
-          period:      "Jan 2024 \u2013 Present",
-          type:        "Full-time",
-          description: "Led development of a multi-tenant SaaS platform using Next.js & Laravel. Integrated AI features via OpenAI API to automate financial reporting. Improved API performance by 60% through query optimization and Redis caching strategy.",
-          tags:        ["Next.js", "Laravel", "OpenAI", "Redis", "MySQL"],
-        },
-        {
-          role:        "Mobile Developer",
-          company:     "PT. Kreasi Teknologi Indonesia",
-          location:    "Bandung, Indonesia",
-          period:      "Jun 2022 \u2013 Dec 2023",
-          type:        "Full-time",
-          description: "Developed 3 cross-platform mobile apps for healthcare and logistics using Flutter. Implemented Clean Architecture + BLoC pattern. Achieved 4.8/5 on the Play Store with 50,000+ active downloads.",
-          tags:        ["Flutter", "Dart", "Firebase", "BLoC", "REST API"],
-        },
-        {
-          role:        "Junior Web Developer",
-          company:     "Freelance / Remote",
-          location:    "Remote",
-          period:      "Mar 2021 \u2013 May 2022",
-          type:        "Freelance",
-          description: "Handled 15+ web development projects for local and international clients \u2014 from company profiles and e-commerce to management information systems built with Laravel & Vue.js.",
-          tags:        ["Laravel", "Vue.js", "PHP", "MySQL", "Bootstrap"],
-        },
-      ],
     },
     certs: {
       subheader: "Verified Skills",

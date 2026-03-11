@@ -3,6 +3,34 @@
 import { motion } from "framer-motion";
 import { Briefcase, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import rawData from "@/data/experience.json";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface ExperienceRaw {
+  role:           string;
+  company:        string;
+  location:       string;
+  period:         string;   // selalu dalam Bahasa Indonesia
+  type:           string;
+  description:    string;   // Indonesia (primary)
+  description_en?: string;  // English override (opsional)
+  tags:           string[];
+}
+
+// ─── Auto-translate period (nama bulan ID → EN + "Sekarang" → "Present") ─────
+const MONTH_MAP: Record<string, string> = {
+  Jan: "Jan", Feb: "Feb", Mar: "Mar", Apr: "Apr",
+  Mei: "May", Jun: "Jun", Jul: "Jul", Ags: "Aug",
+  Sep: "Sep", Okt: "Oct", Nov: "Nov", Des: "Dec",
+  Sekarang: "Present",
+};
+
+function translatePeriod(period: string): string {
+  return period.replace(
+    /\b(Jan|Feb|Mar|Apr|Mei|Jun|Jul|Ags|Sep|Okt|Nov|Des|Sekarang)\b/g,
+    (m) => MONTH_MAP[m] ?? m
+  );
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -18,8 +46,17 @@ const fadeUp = {
 };
 
 export function ExperienceSection() {
-  const { t } = useLanguage();
-  const EXPERIENCES = t.experience.list;
+  const { t, lang } = useLanguage();
+
+  const EXPERIENCES = (rawData as ExperienceRaw[]).map((exp) => ({
+    role:        exp.role,
+    company:     exp.company,
+    location:    exp.location,
+    period:      lang === "en" ? translatePeriod(exp.period) : exp.period,
+    type:        exp.type,
+    description: lang === "en" ? (exp.description_en ?? exp.description) : exp.description,
+    tags:        exp.tags,
+  }));
   return (
     <section id="pengalaman" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Header */}

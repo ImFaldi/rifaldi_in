@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   ArrowUpRight,
   Mail,
@@ -21,6 +22,7 @@ import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { CertSection } from "@/components/sections/CertSection";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SOCIAL } from "@/lib/social";
+import { type GithubRepo, REPO_GRADIENTS, formatRepoName } from "@/lib/github";
 
 // ─── Static project metadata (non-translatable fields) ───────────────────────
 type ProjectMeta = Omit<Project, "title" | "description">;
@@ -60,10 +62,41 @@ const fadeUp = {
 export default function HomePage() {
   const { t } = useLanguage();
 
-  const projects: Project[] = t.projects.list.map((p, i) => ({
-    ...p,
-    ...PROJECT_META[i],
-  }));
+  // ─ GitHub featured repos ──────────────────────────────────────────────────────────
+  const [githubProjects, setGithubProjects] = useState<Project[] | null>(null);
+
+  useEffect(() => {
+    fetch("/api/repos")
+      .then((res) => res.json())
+      .then((repos: GithubRepo[]) => {
+        if (!Array.isArray(repos) || !repos.length) return;
+        setGithubProjects(
+          repos.map((repo, i) => ({
+            title: formatRepoName(repo.name),
+            description: repo.description ?? "",
+            // Gunakan topics repo sebagai tags; fallback ke language jika kosong
+            tags: repo.topics.length
+              ? repo.topics
+              : repo.language
+              ? [repo.language]
+              : [],
+            href: repo.homepage || undefined,
+            repo: repo.html_url,
+            gradient: REPO_GRADIENTS[i % REPO_GRADIENTS.length],
+          }))
+        );
+      })
+      .catch(() => {
+        // Diam-diam fallback ke data i18n jika fetch gagal
+      });
+  }, []);
+
+  // Gunakan data GitHub jika tersedia, fallback ke i18n
+  const projects: Project[] = githubProjects ??
+    t.projects.list.map((p, i) => ({
+      ...p,
+      ...PROJECT_META[i],
+    }));
 
   return (
     <main className="min-h-screen bg-bg-primary">
