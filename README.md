@@ -2,7 +2,7 @@
 
 # ✦ rifaldi.in
 
-**Personal Portfolio Website — Futuristic & Fully Animated**
+**Website Portfolio Pribadi — Futuristik & Full Animasi**
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
@@ -19,24 +19,24 @@
 
 ---
 
-## ✨ Features
+## ✨ Fitur
 
-| Feature | Description |
+| Fitur | Deskripsi |
 |---|---|
-| 🌙 **Dark / Light Mode** | Seamless theme switching with `next-themes` and CSS variable design tokens |
-| 🌐 **Bilingual (ID / EN)** | Full language switching with React Context + `localStorage` persistence |
-| 🖱️ **Custom Cursor** | Magnetic cursor that morphs on hover with spring physics |
-| 🧲 **Magnetic Buttons** | CTA buttons with spring-physics magnetic pull effect |
-| 🃏 **3D Project Cards** | Cards with `useMotionValue` tilt + dynamic glare highlight |
-| 📜 **Smooth Scroll** | Ultra-smooth scroll powered by Lenis |
-| 🎭 **Scroll Animations** | Staggered `whileInView` entrance animations throughout |
-| ♾️ **Infinite Marquee** | Framer Motion–powered looping tech stack ticker |
-| 📊 **Animated Counters** | Spring-based number counters that trigger on scroll |
-| 📱 **Fully Responsive** | Mobile-first layout, works on all screen sizes |
+| 🌙 **Dark / Light Mode** | Pergantian tema mulus dengan `next-themes` dan design token berbasis CSS variables |
+| 🌐 **Bilingual (ID / EN)** | Dukungan ganti bahasa penuh dengan React Context + persistensi `localStorage` |
+| 🖱️ **Custom Cursor** | Cursor magnetik dengan efek morph saat hover menggunakan spring physics |
+| 🧲 **Magnetic Buttons** | Tombol CTA dengan efek tarikan magnetik berbasis spring |
+| 🃏 **3D Project Cards** | Kartu proyek dengan tilt `useMotionValue` + dynamic glare highlight |
+| 📜 **Smooth Scroll** | Scroll sangat halus menggunakan Lenis |
+| 🎭 **Scroll Animations** | Animasi masuk bertahap berbasis `whileInView` di berbagai section |
+| ♾️ **Infinite Marquee** | Ticker tech stack looping menggunakan Framer Motion |
+| 📊 **Animated Counters** | Counter angka berbasis spring yang aktif saat elemen terlihat |
+| 📱 **Fully Responsive** | Mobile-first dan adaptif di berbagai ukuran layar |
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Teknologi
 
 ```
 Framework       Next.js 16.1.6  (App Router, TypeScript, Turbopack)
@@ -52,7 +52,7 @@ Deploy          Vercel
 
 ---
 
-## 📁 Project Structure
+## 📁 Struktur Proyek
 
 ```
 src/
@@ -86,49 +86,50 @@ src/
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Memulai
 
-### Prerequisites
+### Prasyarat
 
 - **Node.js** ≥ 18.x
 - **npm** ≥ 9.x
 
-### Installation
+### Instalasi
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/ImFaldi/rifaldi_in.git
 cd rifaldi_in
 
-# Install dependencies
+# Install dependency
 npm install
 
-# Start development server
+# Jalankan server development
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Buka [http://localhost:3000](http://localhost:3000) di browser.
 
-### Available Scripts
+### Script Tersedia
 
 ```bash
-npm run dev      # Start dev server with Turbopack
-npm run build    # Build for production
-npm run start    # Start production server
-npm run lint     # Run ESLint
+npm run dev               # Menjalankan dev server
+npm run build             # Build production
+npm run start             # Menjalankan hasil build production
+npm run lint              # Menjalankan ESLint
+npm run migrate:supabase  # Migrasi/seed data ke Supabase
 ```
 
 ---
 
 ## 🌐 Deployment
 
-This project is deployed to **Vercel** via the Vercel CLI.
+Project ini dapat dideploy ke **Vercel** via Vercel CLI.
 
 ```bash
 # Install Vercel CLI
 npm install -g vercel
 
-# Deploy to production
+# Deploy ke production
 vercel --yes --prod
 ```
 
@@ -138,10 +139,10 @@ Live URL: **[https://rifaldiin.vercel.app](https://rifaldiin.vercel.app)**
 
 ## 🎨 Design System
 
-The entire color system is built on CSS custom properties with automatic dark/light switching via the `.dark` class (`next-themes`).
+Sistem warna dibangun dengan CSS custom properties dan otomatis mendukung dark/light mode via class `.dark` (`next-themes`).
 
 ```css
-/* Key design tokens */
+/* Design tokens utama */
 --bg-primary       /* Page background */
 --bg-card          /* Card / glass surface */
 --border-color     /* Border color */
@@ -151,25 +152,25 @@ The entire color system is built on CSS custom properties with automatic dark/li
 --accent-soft      /* Accent with low opacity */
 ```
 
-All tokens are mapped to Tailwind shortcuts via `@theme inline`:
+Semua token dipetakan ke shortcut Tailwind melalui `@theme inline`:
 ```
 bg-bg-primary  ·  text-text-primary  ·  text-accent  ·  border-border  ·  bg-accent-soft
 ```
 
 ---
 
-## 🌍 Adding a New Language
+## 🌍 Menambah Bahasa Baru
 
-1. Add the new locale to `Lang` type in [`src/lib/i18n.ts`](src/lib/i18n.ts):
+1. Tambahkan locale baru ke type `Lang` di [`src/lib/i18n.ts`](src/lib/i18n.ts):
    ```ts
    export type Lang = "id" | "en" | "jp"; // add here
    ```
-2. Add the full translation object under `translations.jp`.
-3. Add the new locale to the `LANGS` array in [`src/components/ui/LanguageToggle.tsx`](src/components/ui/LanguageToggle.tsx).
+2. Tambahkan objek translasi lengkap di `translations.jp`.
+3. Tambahkan locale baru di array `LANGS` pada [`src/components/ui/LanguageToggle.tsx`](src/components/ui/LanguageToggle.tsx).
 
 ---
 
-## 🗄️ Supabase CRUD Setup
+## 🗄️ Setup CRUD Supabase
 
 Project ini sekarang sudah support CRUD Supabase untuk 3 resource utama:
 
@@ -177,7 +178,21 @@ Project ini sekarang sudah support CRUD Supabase untuk 3 resource utama:
 - `certifications`
 - `projects`
 
-### 1) Set Environment Variable
+### Struktur Folder Supabase
+
+```txt
+supabase/
+├── schema.sql
+└── seeds/
+   ├── experiences.json
+   ├── certifications.json
+   └── projects.json
+
+scripts/
+└── migrate-supabase.mjs
+```
+
+### 1) Set Environment Variables
 
 Isi file `.env.local`:
 
@@ -186,11 +201,37 @@ NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 ```
 
+Catatan:
+
+- Gunakan URL project Supabase, bukan URL dashboard.
+- `SUPABASE_SERVICE_ROLE_KEY` hanya dipakai di server (API route + script migrasi).
+
 ### 2) Jalankan SQL Schema
 
 Copy isi file `supabase/schema.sql` ke Supabase SQL Editor, lalu jalankan.
 
-### 3) Endpoint CRUD
+### 3) Seed / Migrasi Data Awal
+
+Data seed disimpan di:
+
+- `supabase/seeds/experiences.json`
+- `supabase/seeds/certifications.json`
+- `supabase/seeds/projects.json`
+
+Jalankan migrasi:
+
+```bash
+npm run migrate:supabase
+```
+
+Sifat migrasi:
+
+- `experiences` dan `projects`: insert jika belum ada, update jika sudah ada.
+- `certifications`: upsert berdasarkan `credential_id`.
+
+Jika ingin update data CV, cukup edit file di folder `supabase/seeds`, lalu jalankan ulang `npm run migrate:supabase`.
+
+### 4) Endpoint CRUD
 
 Semua endpoint berada di prefix: `/api/cv`
 
@@ -212,26 +253,59 @@ Semua endpoint berada di prefix: `/api/cv`
 - `PATCH /api/cv/projects/:id`
 - `DELETE /api/cv/projects/:id`
 
-### 4) Integrasi UI
+### 5) Integrasi UI
 
 - Section `Experience` membaca dari `/api/cv/experiences`.
 - Section `Certifications` membaca dari `/api/cv/certifications`.
 - Section `Projects` membaca dari `/api/cv/projects`.
 
-Jika tabel masih kosong atau API gagal, UI otomatis fallback ke data lama.
+Catatan UI saat ini:
+
+- `Experience` dan `Certifications` mengambil data langsung dari Supabase API.
+- `Projects` prioritas dari Supabase API, fallback ke GitHub API jika data Supabase kosong.
+
+### 6) Verifikasi Cepat
+
+Setelah schema + seed sukses, cek endpoint ini:
+
+```bash
+GET /api/cv/experiences
+GET /api/cv/certifications
+GET /api/cv/projects
+```
+
+Expected: endpoint mengembalikan array data (bukan error env / table not found).
+
+### 7) Troubleshooting
+
+1. Error `Could not find the table ... in the schema cache`
+
+- Pastikan `supabase/schema.sql` sudah dijalankan pada project yang sama dengan URL dan key di `.env.local`.
+
+2. Error `Supabase belum dikonfigurasi`
+
+- Cek kembali `NEXT_PUBLIC_SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY` di `.env.local`.
+
+3. `npm run dev` gagal karena Turbopack internal error
+
+- Jalankan mode webpack sementara:
+
+```bash
+npx next dev --webpack
+```
 
 ---
 
-## 📸 Adding Your Real Photo
+## 📸 Menambahkan Foto Profil Asli
 
-Replace the initials placeholder in `src/app/page.tsx`:
+Ganti placeholder inisial di `src/app/page.tsx`:
 
-1. Place your photo at `/public/images/profile.jpg`
-2. Add the import at the top of `page.tsx`:
+1. Simpan foto di `/public/images/profile.jpg`
+2. Tambahkan import berikut di bagian atas `page.tsx`:
    ```tsx
    import Image from "next/image";
    ```
-3. Replace the placeholder div with:
+3. Ganti div placeholder dengan:
    ```tsx
    <Image
      src="/images/profile.jpg"
@@ -244,20 +318,14 @@ Replace the initials placeholder in `src/app/page.tsx`:
 
 ---
 
-## 📄 License
+## 📄 Lisensi
 
-This project is open source and available under the [MIT License](LICENSE).
+Project ini bersifat open source dengan lisensi [MIT License](LICENSE).
 
 ---
 
 <div align="center">
 
-Made with ♥ by **[Rifaldi](https://rifaldiin.vercel.app)** — using Next.js, Tailwind CSS & Framer Motion.
+Made with ♥ by **[Rifaldi](https://rifaldiin.vercel.app)** using Next.js, Tailwind CSS, dan Framer Motion.
 
 </div>
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
