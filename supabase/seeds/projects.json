@@ -1,0 +1,32 @@
+[
+  {
+    "title": "SaaSify Dashboard",
+    "title_en": "SaaSify Dashboard",
+    "description": "Platform manajemen SaaS real-time dengan analitik interaktif, role-based access control, dan integrasi payment gateway Midtrans.",
+    "description_en": "A real-time SaaS management platform with interactive analytics, role-based access control, and Midtrans payment gateway integration.",
+    "tags": ["Next.js", "Laravel", "Tailwind", "MySQL"],
+    "href": "https://example.com",
+    "repo": "https://github.com",
+    "gradient": "from-violet-600 via-indigo-600 to-blue-600"
+  },
+  {
+    "title": "NutriTrack Mobile",
+    "title_en": "NutriTrack Mobile",
+    "description": "Aplikasi pelacak nutrisi berbasis Flutter dengan AI meal recognition, integrasi dengan wearables, dan dashboard kesehatan harian.",
+    "description_en": "A Flutter-based nutrition tracking app with AI meal recognition, wearables integration, and a daily health dashboard.",
+    "tags": ["Flutter", "Firebase", "TensorFlow Lite"],
+    "href": null,
+    "repo": "https://github.com",
+    "gradient": "from-emerald-500 via-teal-500 to-cyan-500"
+  },
+  {
+    "title": "AI Document Agent",
+    "title_en": "AI Document Agent",
+    "description": "Agen AI multi-step yang dapat membaca, meringkas, dan menjawab pertanyaan dari dokumen PDF panjang menggunakan RAG pipeline.",
+    "description_en": "A multi-step AI agent that reads, summarizes, and answers questions from long PDF documents using a RAG pipeline.",
+    "tags": ["LangChain", "Express.js", "Pinecone", "OpenAI"],
+    "href": "https://example.com",
+    "repo": null,
+    "gradient": "from-amber-500 via-orange-500 to-rose-500"
+  }
+]

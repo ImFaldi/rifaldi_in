@@ -1,0 +1,62 @@
+[
+  {
+    "name": "AWS Certified Developer - Associate",
+    "issuer": "Amazon Web Services",
+    "date": "Nov 2024",
+    "credential_id": "AWS-DA-2024-RF",
+    "badge": "AWS",
+    "gradient": "from-orange-500/15 to-amber-400/5",
+    "hover_border": "hover:border-orange-400/40",
+    "href": "https://aws.amazon.com/certification/"
+  },
+  {
+    "name": "Professional Cloud Developer",
+    "issuer": "Google Cloud",
+    "date": "Mar 2024",
+    "credential_id": "GCP-PCD-RF-2024",
+    "badge": "GCP",
+    "gradient": "from-blue-500/15 to-sky-400/5",
+    "hover_border": "hover:border-blue-400/40",
+    "href": null
+  },
+  {
+    "name": "Meta React Developer Certificate",
+    "issuer": "Meta / Coursera",
+    "date": "Aug 2023",
+    "credential_id": "META-RD-2023",
+    "badge": "META",
+    "gradient": "from-indigo-500/15 to-violet-400/5",
+    "hover_border": "hover:border-indigo-400/40",
+    "href": null
+  },
+  {
+    "name": "Machine Learning Specialization",
+    "issuer": "Coursera - Andrew Ng",
+    "date": "Dec 2022",
+    "credential_id": "ML-SPEC-2022",
+    "badge": "ML",
+    "gradient": "from-rose-500/15 to-pink-400/5",
+    "hover_border": "hover:border-rose-400/40",
+    "href": null
+  },
+  {
+    "name": "Flutter & Dart - The Complete Guide",
+    "issuer": "Udemy - Angela Yu",
+    "date": "Feb 2023",
+    "credential_id": "UD-FLUTTER-2023",
+    "badge": "FLUTTER",
+    "gradient": "from-cyan-500/15 to-teal-400/5",
+    "hover_border": "hover:border-cyan-400/40",
+    "href": null
+  },
+  {
+    "name": "Laravel Certified Developer",
+    "issuer": "Laravel LLC",
+    "date": "Oct 2022",
+    "credential_id": "LRV-CD-2022",
+    "badge": "LARAVEL",
+    "gradient": "from-red-500/15 to-orange-400/5",
+    "hover_border": "hover:border-red-400/40",
+    "href": null
+  }
+]

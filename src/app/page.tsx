@@ -24,9 +24,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { SOCIAL } from "@/lib/social";
 import { type GithubRepo, REPO_GRADIENTS, formatRepoName } from "@/lib/github";
 
-// ─── Static project metadata (non-translatable fields) ───────────────────────
-type ProjectMeta = Omit<Project, "title" | "description">;
-
 interface DatabaseProject {
   id: string;
   title: string;
@@ -38,27 +35,6 @@ interface DatabaseProject {
   repo: string | null;
   gradient: string;
 }
-
-const PROJECT_META: ProjectMeta[] = [
-  {
-    tags: ["Next.js", "Laravel", "Tailwind", "MySQL"],
-    href: "https://example.com",
-    repo: "https://github.com",
-    gradient: "from-violet-600 via-indigo-600 to-blue-600",
-  },
-  {
-    tags: ["Flutter", "Firebase", "TensorFlow Lite"],
-    href: undefined,
-    repo: "https://github.com",
-    gradient: "from-emerald-500 via-teal-500 to-cyan-500",
-  },
-  {
-    tags: ["LangChain", "Express.js", "Pinecone", "OpenAI"],
-    href: "https://example.com",
-    repo: undefined,
-    gradient: "from-amber-500 via-orange-500 to-rose-500",
-  },
-];
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 const fadeUp = {
@@ -115,7 +91,7 @@ export default function HomePage() {
           }))
         );
       } catch {
-        // fallback ke data i18n jika fetch gagal
+        // fallback ke array kosong jika fetch gagal
       }
     }
 
@@ -138,11 +114,7 @@ export default function HomePage() {
         repo: project.repo ?? undefined,
         gradient: project.gradient || REPO_GRADIENTS[i % REPO_GRADIENTS.length],
       }))
-    : githubProjects ??
-      t.projects.list.map((p, i) => ({
-        ...p,
-        ...PROJECT_META[i],
-      }));
+    : githubProjects ?? [];
 
   return (
     <main className="min-h-screen bg-bg-primary">

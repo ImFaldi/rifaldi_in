@@ -29,72 +29,9 @@ interface CertApiItem {
   href: string | null;
 }
 
-const CERTS: CertItem[] = [
-  {
-    name: "AWS Certified Developer – Associate",
-    issuer: "Amazon Web Services",
-    date: "Nov 2024",
-    credentialId: "AWS-DA-2024-RF",
-    badge: "☁️",
-    gradient: "from-orange-500/15 to-amber-400/5",
-    hoverBorder: "hover:border-orange-400/40",
-    href: "https://aws.amazon.com/certification/",
-  },
-  {
-    name: "Professional Cloud Developer",
-    issuer: "Google Cloud",
-    date: "Mar 2024",
-    credentialId: "GCP-PCD-RF-2024",
-    badge: "🔵",
-    gradient: "from-blue-500/15 to-sky-400/5",
-    hoverBorder: "hover:border-blue-400/40",
-    href: "#",
-  },
-  {
-    name: "Meta React Developer Certificate",
-    issuer: "Meta / Coursera",
-    date: "Aug 2023",
-    credentialId: "META-RD-2023",
-    badge: "⚛️",
-    gradient: "from-indigo-500/15 to-violet-400/5",
-    hoverBorder: "hover:border-indigo-400/40",
-    href: "#",
-  },
-  {
-    name: "Machine Learning Specialization",
-    issuer: "Coursera – Andrew Ng",
-    date: "Dec 2022",
-    credentialId: "ML-SPEC-2022",
-    badge: "🤖",
-    gradient: "from-rose-500/15 to-pink-400/5",
-    hoverBorder: "hover:border-rose-400/40",
-    href: "#",
-  },
-  {
-    name: "Flutter & Dart – The Complete Guide",
-    issuer: "Udemy – Angela Yu",
-    date: "Feb 2023",
-    credentialId: "UD-FLUTTER-2023",
-    badge: "💙",
-    gradient: "from-cyan-500/15 to-teal-400/5",
-    hoverBorder: "hover:border-cyan-400/40",
-    href: "#",
-  },
-  {
-    name: "Laravel Certified Developer",
-    issuer: "Laravel LLC",
-    date: "Oct 2022",
-    credentialId: "LRV-CD-2022",
-    badge: "🔴",
-    gradient: "from-red-500/15 to-orange-400/5",
-    hoverBorder: "hover:border-red-400/40",
-    href: "#",
-  },
-];
-
 export function CertSection() {
   const { t } = useLanguage();
-  const [remoteCerts, setRemoteCerts] = useState<CertItem[] | null>(null);
+  const [remoteCerts, setRemoteCerts] = useState<CertItem[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -102,7 +39,7 @@ export function CertSection() {
     fetch("/api/cv/certifications")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (!isMounted || !Array.isArray(data) || data.length === 0) return;
+        if (!isMounted || !Array.isArray(data)) return;
 
         const mapped = (data as CertApiItem[]).map((item) => ({
           id: item.id,
@@ -118,16 +55,14 @@ export function CertSection() {
 
         setRemoteCerts(mapped);
       })
-      .catch(() => {
-        // fallback ke data lokal
-      });
+      .catch(() => {});
 
     return () => {
       isMounted = false;
     };
   }, []);
 
-  const certsToRender = remoteCerts ?? CERTS;
+  const certsToRender = remoteCerts;
 
   return (
     <section id="sertifikasi" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
