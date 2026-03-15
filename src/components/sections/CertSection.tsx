@@ -1,10 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Award, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const CERTS = [
+interface CertItem {
+  id?: string;
+  name: string;
+  issuer: string;
+  date: string;
+  credentialId: string;
+  badge: string;
+  gradient: string;
+  hoverBorder: string;
+  href: string;
+}
+
+interface CertApiItem {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  credential_id: string;
+  badge: string;
+  gradient: string;
+  hover_border: string;
+  href: string | null;
+}
+
+const CERTS: CertItem[] = [
   {
     name: "AWS Certified Developer – Associate",
     issuer: "Amazon Web Services",
@@ -69,6 +94,41 @@ const CERTS = [
 
 export function CertSection() {
   const { t } = useLanguage();
+  const [remoteCerts, setRemoteCerts] = useState<CertItem[] | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/cv/certifications")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted || !Array.isArray(data) || data.length === 0) return;
+
+        const mapped = (data as CertApiItem[]).map((item) => ({
+          id: item.id,
+          name: item.name,
+          issuer: item.issuer,
+          date: item.date,
+          credentialId: item.credential_id,
+          badge: item.badge,
+          gradient: item.gradient,
+          hoverBorder: item.hover_border,
+          href: item.href ?? "#",
+        }));
+
+        setRemoteCerts(mapped);
+      })
+      .catch(() => {
+        // fallback ke data lokal
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const certsToRender = remoteCerts ?? CERTS;
+
   return (
     <section id="sertifikasi" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Header */}
@@ -88,9 +148,9 @@ export function CertSection() {
       </motion.div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {CERTS.map((cert, i) => (
+        {certsToRender.map((cert, i) => (
           <motion.a
-            key={cert.credentialId}
+            key={cert.id ?? cert.credentialId}
             href={cert.href}
             target="_blank"
             rel="noopener noreferrer"

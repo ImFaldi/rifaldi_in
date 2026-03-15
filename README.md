@@ -169,6 +169,59 @@ bg-bg-primary  ·  text-text-primary  ·  text-accent  ·  border-border  ·  bg
 
 ---
 
+## 🗄️ Supabase CRUD Setup
+
+Project ini sekarang sudah support CRUD Supabase untuk 3 resource utama:
+
+- `experiences`
+- `certifications`
+- `projects`
+
+### 1) Set Environment Variable
+
+Isi file `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+```
+
+### 2) Jalankan SQL Schema
+
+Copy isi file `supabase/schema.sql` ke Supabase SQL Editor, lalu jalankan.
+
+### 3) Endpoint CRUD
+
+Semua endpoint berada di prefix: `/api/cv`
+
+- `GET /api/cv/experiences`
+- `POST /api/cv/experiences`
+- `GET /api/cv/experiences/:id`
+- `PATCH /api/cv/experiences/:id`
+- `DELETE /api/cv/experiences/:id`
+
+- `GET /api/cv/certifications`
+- `POST /api/cv/certifications`
+- `GET /api/cv/certifications/:id`
+- `PATCH /api/cv/certifications/:id`
+- `DELETE /api/cv/certifications/:id`
+
+- `GET /api/cv/projects`
+- `POST /api/cv/projects`
+- `GET /api/cv/projects/:id`
+- `PATCH /api/cv/projects/:id`
+- `DELETE /api/cv/projects/:id`
+
+### 4) Integrasi UI
+
+- Section `Experience` membaca dari `/api/cv/experiences`.
+- Section `Certifications` membaca dari `/api/cv/certifications`.
+- Section `Projects` membaca dari `/api/cv/projects`.
+
+Jika tabel masih kosong atau API gagal, UI otomatis fallback ke data lama.
+
+---
+
 ## 📸 Adding Your Real Photo
 
 Replace the initials placeholder in `src/app/page.tsx`:

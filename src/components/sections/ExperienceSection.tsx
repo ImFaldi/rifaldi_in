@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Briefcase, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -7,6 +8,7 @@ import rawData from "@/data/experience.json";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface ExperienceRaw {
+  id?:            string;
   role:           string;
   company:        string;
   location:       string;
@@ -47,16 +49,42 @@ const fadeUp = {
 
 export function ExperienceSection() {
   const { t, lang } = useLanguage();
+  const [remoteExperiences, setRemoteExperiences] = useState<ExperienceRaw[] | null>(null);
 
-  const EXPERIENCES = (rawData as ExperienceRaw[]).map((exp) => ({
-    role:        exp.role,
-    company:     exp.company,
-    location:    exp.location,
-    period:      lang === "en" ? translatePeriod(exp.period) : exp.period,
-    type:        exp.type,
-    description: lang === "en" ? (exp.description_en ?? exp.description) : exp.description,
-    tags:        exp.tags,
-  }));
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/cv/experiences")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted || !Array.isArray(data) || data.length === 0) return;
+        setRemoteExperiences(data as ExperienceRaw[]);
+      })
+      .catch(() => {
+        // fallback ke data lokal
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const experiencesSource = remoteExperiences ?? (rawData as ExperienceRaw[]);
+  const EXPERIENCES = useMemo(
+    () =>
+      experiencesSource.map((exp) => ({
+        id:          exp.id,
+        role:        exp.role,
+        company:     exp.company,
+        location:    exp.location,
+        period:      lang === "en" ? translatePeriod(exp.period) : exp.period,
+        type:        exp.type,
+        description: lang === "en" ? (exp.description_en ?? exp.description) : exp.description,
+        tags:        exp.tags,
+      })),
+    [experiencesSource, lang]
+  );
+
   return (
     <section id="pengalaman" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Header */}
@@ -83,7 +111,7 @@ export function ExperienceSection() {
         <div className="flex flex-col gap-8">
           {EXPERIENCES.map((exp, i) => (
             <motion.div
-              key={exp.company}
+              key={exp.id ?? `${exp.company}-${i}`}
               custom={i}
               variants={fadeUp}
               initial="hidden"

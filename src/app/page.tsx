@@ -27,6 +27,18 @@ import { type GithubRepo, REPO_GRADIENTS, formatRepoName } from "@/lib/github";
 // ─── Static project metadata (non-translatable fields) ───────────────────────
 type ProjectMeta = Omit<Project, "title" | "description">;
 
+interface DatabaseProject {
+  id: string;
+  title: string;
+  title_en: string | null;
+  description: string;
+  description_en: string | null;
+  tags: string[];
+  href: string | null;
+  repo: string | null;
+  gradient: string;
+}
+
 const PROJECT_META: ProjectMeta[] = [
   {
     tags: ["Next.js", "Laravel", "Tailwind", "MySQL"],
@@ -60,21 +72,38 @@ const fadeUp = {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   // ─ GitHub featured repos ──────────────────────────────────────────────────────────
+  const [databaseProjects, setDatabaseProjects] = useState<DatabaseProject[] | null>(null);
   const [githubProjects, setGithubProjects] = useState<Project[] | null>(null);
 
   useEffect(() => {
-    fetch("/api/repos")
-      .then((res) => res.json())
-      .then((repos: GithubRepo[]) => {
-        if (!Array.isArray(repos) || !repos.length) return;
+    let isMounted = true;
+
+    async function loadProjects() {
+      try {
+        const dbRes = await fetch("/api/cv/projects");
+        if (dbRes.ok) {
+          const dbData = (await dbRes.json()) as DatabaseProject[];
+          if (isMounted && Array.isArray(dbData) && dbData.length) {
+            setDatabaseProjects(dbData);
+            return;
+          }
+        }
+      } catch {
+        // fallback ke GitHub
+      }
+
+      try {
+        const githubRes = await fetch("/api/repos");
+        const repos = (await githubRes.json()) as GithubRepo[];
+        if (!isMounted || !Array.isArray(repos) || !repos.length) return;
+
         setGithubProjects(
           repos.map((repo, i) => ({
             title: formatRepoName(repo.name),
             description: repo.description ?? "",
-            // Gunakan topics repo sebagai tags; fallback ke language jika kosong
             tags: repo.topics.length
               ? repo.topics
               : repo.language
@@ -85,18 +114,35 @@ export default function HomePage() {
             gradient: REPO_GRADIENTS[i % REPO_GRADIENTS.length],
           }))
         );
-      })
-      .catch(() => {
-        // Diam-diam fallback ke data i18n jika fetch gagal
-      });
+      } catch {
+        // fallback ke data i18n jika fetch gagal
+      }
+    }
+
+    void loadProjects();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // Gunakan data GitHub jika tersedia, fallback ke i18n
-  const projects: Project[] = githubProjects ??
-    t.projects.list.map((p, i) => ({
-      ...p,
-      ...PROJECT_META[i],
-    }));
+  const projects: Project[] = databaseProjects?.length
+    ? databaseProjects.map((project, i) => ({
+        title: lang === "en" ? (project.title_en ?? project.title) : project.title,
+        description:
+          lang === "en"
+            ? (project.description_en ?? project.description)
+            : project.description,
+        tags: project.tags,
+        href: project.href ?? undefined,
+        repo: project.repo ?? undefined,
+        gradient: project.gradient || REPO_GRADIENTS[i % REPO_GRADIENTS.length],
+      }))
+    : githubProjects ??
+      t.projects.list.map((p, i) => ({
+        ...p,
+        ...PROJECT_META[i],
+      }));
 
   return (
     <main className="min-h-screen bg-bg-primary">
