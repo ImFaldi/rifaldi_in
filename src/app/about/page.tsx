@@ -2,17 +2,31 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Briefcase, Cpu, Layers3, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SitePageNav } from "@/components/layout/SitePageNav";
 
 export default function AboutPage() {
   const { lang } = useLanguage();
+  const prefersReducedMotion = useReducedMotion();
+  const [isFinePointer, setIsFinePointer] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(pointer: fine)");
+    const syncPointer = () => setIsFinePointer(mediaQuery.matches);
+
+    syncPointer();
+    mediaQuery.addEventListener("change", syncPointer);
+    return () => mediaQuery.removeEventListener("change", syncPointer);
+  }, []);
+
+  const canUseHoverTilt = isFinePointer && !prefersReducedMotion;
 
   const revealUp = {
     hidden: { opacity: 0, y: 22 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const } },
   };
 
   const staggerWrap = {
@@ -77,6 +91,45 @@ export default function AboutPage() {
       ? ["Discovery and scope alignment", "Execution in transparent iterations", "Release, monitoring, and continuous refinement"]
       : ["Discovery dan penyelarasan scope", "Eksekusi dalam iterasi yang transparan", "Rilis, monitoring, dan continuous refinement"];
 
+  const services =
+    lang === "en"
+      ? [
+          {
+            title: "Web Development",
+            text: "Building fast, scalable, and SEO-friendly web platforms for business growth.",
+          },
+          {
+            title: "Mobile App Development",
+            text: "Developing reliable cross-platform mobile apps with clean UX and maintainable architecture.",
+          },
+          {
+            title: "System Integration",
+            text: "Connecting APIs, databases, and third-party services into a robust unified workflow.",
+          },
+          {
+            title: "Technical Consulting",
+            text: "Helping teams improve code quality, architecture decisions, and delivery velocity.",
+          },
+        ]
+      : [
+          {
+            title: "Web Development",
+            text: "Membangun platform web yang cepat, scalable, dan SEO-friendly untuk pertumbuhan bisnis.",
+          },
+          {
+            title: "Mobile App Development",
+            text: "Mengembangkan aplikasi mobile lintas platform yang andal dengan UX bersih dan arsitektur maintainable.",
+          },
+          {
+            title: "System Integration",
+            text: "Menghubungkan API, database, dan layanan pihak ketiga ke dalam alur kerja yang menyatu dan robust.",
+          },
+          {
+            title: "Technical Consulting",
+            text: "Membantu tim meningkatkan kualitas kode, keputusan arsitektur, dan kecepatan delivery.",
+          },
+        ];
+
   return (
     <main className="ambient-grid relative min-h-screen overflow-hidden bg-bg-primary px-4 pb-20 pt-32 text-text-primary sm:px-6">
       <div className="pointer-events-none absolute -left-32 top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
@@ -134,7 +187,8 @@ export default function AboutPage() {
 
           <motion.div
             variants={revealUp}
-            whileHover={{ y: -4, rotateX: -1.2, rotateY: 2.4 }}
+            whileHover={canUseHoverTilt ? { y: -4, rotateX: -1.2, rotateY: 2.4 } : undefined}
+            whileTap={!canUseHoverTilt ? { scale: 0.996 } : undefined}
             transition={{ type: "spring", stiffness: 210, damping: 20 }}
             style={{ transformStyle: "preserve-3d" }}
             className="glass-card relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/90 p-5 lg:justify-self-end lg:p-6 xl:max-w-[500px]"
@@ -144,7 +198,8 @@ export default function AboutPage() {
               {lang === "en" ? "Professional Snapshot" : "Professional Snapshot"}
             </p>
             <motion.div
-              whileHover={{ scale: 1.018 }}
+              whileHover={canUseHoverTilt ? { scale: 1.018 } : undefined}
+              whileTap={!canUseHoverTilt ? { scale: 0.998 } : undefined}
               transition={{ type: "spring", stiffness: 180, damping: 22 }}
               className="relative mt-3 min-h-[300px] overflow-hidden rounded-xl border border-border/80 sm:min-h-[340px] lg:min-h-[400px]"
             >
@@ -188,6 +243,38 @@ export default function AboutPage() {
               <p className="mt-2 text-sm leading-relaxed text-text-secondary">{pillar.text}</p>
             </motion.article>
           ))}
+        </motion.section>
+
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerWrap}
+          className="mt-10"
+        >
+          <motion.div variants={revealUp} className="mb-4 flex items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+                {lang === "en" ? "Services" : "Layanan"}
+              </p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-text-primary sm:text-3xl">
+                {lang === "en" ? "What I Can Help You Build" : "Hal yang Bisa Saya Bantu Bangun"}
+              </h2>
+            </div>
+          </motion.div>
+
+          <motion.div variants={staggerWrap} className="grid gap-4 sm:grid-cols-2">
+            {services.map((service) => (
+              <motion.article
+                variants={revealUp}
+                key={service.title}
+                className="glass-card rounded-2xl border border-border p-5 transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <h3 className="text-base font-extrabold text-text-primary">{service.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{service.text}</p>
+              </motion.article>
+            ))}
+          </motion.div>
         </motion.section>
 
         <motion.section

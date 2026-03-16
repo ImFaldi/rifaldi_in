@@ -10,9 +10,7 @@ import {
   useTransform,
 } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
 import {
   ArrowUpRight,
   Mail,
@@ -24,17 +22,14 @@ import {
   Quote,
   Rocket,
   Timer,
-  Menu,
-  X,
 } from "lucide-react";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ProjectCard, type Project } from "@/components/ui/ProjectCard";
 import { TechMarquee } from "@/components/ui/TechMarquee";
 import { StatsGrid } from "@/components/ui/StatsGrid";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { CertSection } from "@/components/sections/CertSection";
+import { SitePageNav } from "@/components/layout/SitePageNav";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SOCIAL } from "@/lib/social";
 import { type GithubRepo, REPO_GRADIENTS, formatRepoName } from "@/lib/github";
@@ -75,28 +70,10 @@ const cinematicSection = {
   }),
 };
 
-const mobileMenuList = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.045,
-      delayChildren: 0.04,
-    },
-  },
-};
-
-const mobileMenuItem = {
-  hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const } },
-};
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   const { t, lang } = useLanguage();
-  const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
   const [isFinePointer, setIsFinePointer] = useState(false);
   const [showFloatingDashboard, setShowFloatingDashboard] = useState(true);
@@ -190,13 +167,6 @@ export default function HomePage() {
       isMounted = false;
     };
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileMenuOpen]);
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -321,8 +291,7 @@ export default function HomePage() {
     [lang]
   );
 
-  const shouldShowFloatingDashboard =
-    !mobileMenuOpen && (prefersReducedMotion ? true : showFloatingDashboard);
+  const shouldShowFloatingDashboard = prefersReducedMotion ? true : showFloatingDashboard;
 
   return (
     <main className="ambient-grid relative min-h-screen overflow-hidden bg-bg-primary">
@@ -379,192 +348,7 @@ export default function HomePage() {
       />
       <div className="noise-overlay pointer-events-none absolute inset-0" />
 
-      <nav className="fixed inset-x-0 top-4 z-50 px-4 sm:px-6">
-        <div className="premium-nav-shell mx-auto grid w-full max-w-7xl grid-cols-[auto_1fr] items-center rounded-2xl border border-border bg-bg-card/80 px-4 py-2.5 shadow-lg backdrop-blur-xl md:grid-cols-[1fr_auto_1fr] sm:px-5 sm:py-3">
-          <motion.div
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="hidden md:flex items-center gap-3 justify-self-start"
-          >
-            <Link href="/" className="font-bold text-text-primary text-lg tracking-tight">
-              rifaldi<span className="text-accent">.</span>
-            </Link>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="justify-self-start font-bold text-text-primary text-lg tracking-tight md:hidden"
-          >
-            <Link href="/">
-              rifaldi<span className="text-accent">.</span>
-            </Link>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="hidden md:flex items-center gap-6 justify-self-center"
-          >
-            {t.nav.links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`relative rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors duration-200 ${
-                  pathname === link.href
-                    ? "text-text-primary"
-                    : "text-text-secondary hover:text-text-primary"
-                }`}
-              >
-                {pathname === link.href && (
-                  <motion.span
-                    layoutId="desktop-nav-pill"
-                    className="absolute inset-0 -z-10 rounded-lg bg-accent-soft/70"
-                    transition={{ type: "spring", stiffness: 280, damping: 28 }}
-                  />
-                )}
-                {link.label}
-              </Link>
-            ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="hidden md:flex items-center gap-2.5 justify-self-end"
-          >
-            <a
-              href={SOCIAL.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              className="text-text-secondary hover:text-accent transition-colors"
-            >
-              <Github size={18} />
-            </a>
-            <a
-              href={SOCIAL.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="text-text-secondary hover:text-accent transition-colors"
-            >
-              <Linkedin size={18} />
-            </a>
-            <LanguageToggle />
-            <ThemeToggle />
-          </motion.div>
-
-          <div className="flex items-center gap-2 justify-self-end md:hidden">
-            <div className="flex h-11 items-center gap-1.5 px-0.5 py-1">
-              <LanguageToggle compact className="border-transparent bg-transparent" />
-              <ThemeToggle compact className="border-transparent bg-transparent hover:bg-transparent" />
-            </div>
-            <button
-              type="button"
-              aria-label="Toggle mobile menu"
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-transparent bg-transparent text-text-primary transition-colors hover:bg-transparent"
-            >
-              {mobileMenuOpen ? <X size={16} /> : <Menu size={16} />}
-            </button>
-          </div>
-        </div>
-
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <>
-              <motion.button
-                type="button"
-                aria-label="Close mobile menu backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.18 }}
-                onClick={() => setMobileMenuOpen(false)}
-                className="fixed inset-0 z-40 bg-bg-primary/55 backdrop-blur-[2px] md:hidden"
-              />
-
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.22 }}
-                className="premium-mobile-menu relative z-50 mx-auto mt-2 w-full max-w-7xl rounded-2xl border border-border bg-bg-card/95 p-3 shadow-2xl backdrop-blur-xl md:hidden"
-              >
-                <p className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-secondary">
-                  Navigation
-                </p>
-                <motion.div variants={mobileMenuList} initial="hidden" animate="show" className="grid grid-cols-2 gap-2">
-                  {t.nav.links.map((link) => {
-                    const isActive = pathname === link.href;
-
-                    return (
-                      <motion.div
-                        variants={mobileMenuItem}
-                        key={`mobile-${link.href}`}
-                      >
-                        <Link
-                          href={link.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={`relative block rounded-xl border px-3 py-2 text-sm font-semibold transition-colors ${
-                            isActive
-                              ? "border-accent/30 text-text-primary"
-                              : "border-border text-text-primary hover:bg-accent-soft"
-                          }`}
-                        >
-                          {isActive && (
-                            <motion.span
-                              layoutId="mobile-menu-pill"
-                              className="absolute inset-0 -z-10 rounded-xl bg-accent-soft"
-                              transition={{ type: "spring", stiffness: 260, damping: 28 }}
-                            />
-                          )}
-                          {link.label}
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </motion.div>
-                <motion.div variants={mobileMenuList} initial="hidden" animate="show" className="mt-3 flex items-center gap-2">
-                  <motion.a
-                    variants={mobileMenuItem}
-                    href="/auth"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="inline-flex flex-1 items-center justify-center rounded-xl bg-accent px-3 py-2 text-sm font-semibold text-white"
-                  >
-                    Dashboard
-                  </motion.a>
-                  <motion.a
-                    variants={mobileMenuItem}
-                    href={SOCIAL.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border text-text-secondary hover:text-accent"
-                    aria-label="GitHub"
-                  >
-                    <Github size={16} />
-                  </motion.a>
-                  <motion.a
-                    variants={mobileMenuItem}
-                    href={SOCIAL.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border text-text-secondary hover:text-accent"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin size={16} />
-                  </motion.a>
-                </motion.div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </nav>
+      <SitePageNav />
 
       <section
         id="beranda"
