@@ -1,7 +1,14 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useRef, useState, useCallback, useEffect } from "react";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 
 export interface Project {
@@ -20,7 +27,9 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
   const [isHovered, setIsHovered] = useState(false);
+  const [canUsePointerTilt, setCanUsePointerTilt] = useState(false);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -28,13 +37,30 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const mouseX = useSpring(x, { stiffness: 300, damping: 30 });
   const mouseY = useSpring(y, { stiffness: 300, damping: 30 });
 
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["12deg", "-12deg"]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-12deg", "12deg"]);
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["9deg", "-9deg"]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-9deg", "9deg"]);
   const glareX = useTransform(mouseX, [-0.5, 0.5], ["0%", "100%"]);
   const glareY = useTransform(mouseY, [-0.5, 0.5], ["0%", "100%"]);
+  const glare = useMotionTemplate`radial-gradient(circle at ${glareX} ${glareY}, rgba(255,255,255,0.7), transparent 60%)`;
+  const tiltEnabled = canUsePointerTilt && !prefersReducedMotion;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(pointer: fine)");
+    const syncPointerCapability = () => {
+      setCanUsePointerTilt(mediaQuery.matches);
+    };
+
+    syncPointerCapability();
+    mediaQuery.addEventListener("change", syncPointerCapability);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncPointerCapability);
+    };
+  }, []);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!tiltEnabled) return;
       if (!cardRef.current) return;
       const rect = cardRef.current.getBoundingClientRect();
       const normalX = (e.clientX - rect.left) / rect.width - 0.5;
@@ -42,7 +68,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
       x.set(normalX);
       y.set(normalY);
     },
-    [x, y]
+    [tiltEnabled, x, y]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -55,28 +81,45 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     <motion.div
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={prefersReducedMotion ? undefined : { y: -6 }}
+      whileTap={{ scale: 0.99 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
       style={{ perspective: "1000px" }}
     >
       <motion.div
         ref={cardRef}
-        onMouseMove={handleMouseMove}
+        onMouseMove={tiltEnabled ? handleMouseMove : undefined}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        style={
+          tiltEnabled
+            ? { rotateX, rotateY, transformStyle: "preserve-3d" }
+            : { transformStyle: "preserve-3d" }
+        }
         data-cursor-hover
-        className="glass-card rounded-2xl overflow-hidden group cursor-pointer h-full"
+        className="glass-card rounded-2xl overflow-hidden group cursor-pointer h-full ring-1 ring-white/12"
       >
         {/* Gradient Banner */}
         <div className={`h-36 w-full bg-linear-to-br ${project.gradient} relative`}>
           {/* Glare overlay */}
           <motion.div
-            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
+            className={`absolute inset-0 transition-opacity duration-300 ${
+              tiltEnabled ? "opacity-0 group-hover:opacity-20" : "opacity-12"
+            }`}
             style={{
-              background: `radial-gradient(circle at ${glareX.get()} ${glareY.get()}, white, transparent 60%)`,
+              background: glare,
               pointerEvents: "none",
             }}
+          />
+          <motion.div
+            animate={
+              isHovered && !prefersReducedMotion
+                ? { x: ["-130%", "130%"], opacity: [0, 0.3, 0] }
+                : { x: "-130%", opacity: 0 }
+            }
+            transition={{ duration: 0.9, ease: "easeOut" }}
+            className="absolute inset-y-0 w-1/3 -skew-x-12 bg-white/35 blur-md"
           />
           {/* Shine */}
           <motion.div
@@ -101,12 +144,13 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           {/* Tech Badges */}
           <div className="flex flex-wrap gap-1.5 mt-1">
             {project.tags.map((tag) => (
-              <span
+              <motion.span
                 key={tag}
+                whileHover={prefersReducedMotion ? undefined : { y: -1 }}
                 className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-accent-soft text-accent border border-border"
               >
                 {tag}
-              </span>
+              </motion.span>
             ))}
           </div>
 

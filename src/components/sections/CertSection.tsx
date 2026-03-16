@@ -65,7 +65,7 @@ export function CertSection() {
   const certsToRender = remoteCerts;
 
   return (
-    <section id="sertifikasi" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+    <section id="sertifikasi" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

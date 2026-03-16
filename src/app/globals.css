@@ -53,6 +53,179 @@ body {
   overflow-x: hidden;
 }
 
+.ambient-grid {
+  background-image:
+    radial-gradient(circle at 18% 8%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 36%),
+    radial-gradient(circle at 84% 22%, color-mix(in oklab, #22d3ee 16%, transparent), transparent 34%),
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--text-primary) 5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--text-primary) 5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: auto, auto, 38px 38px, 38px 38px;
+  background-position: center, center, center, center;
+}
+
+.noise-overlay {
+  opacity: 0.18;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+.dark .noise-overlay {
+  opacity: 0.12;
+}
+
+.premium-nav-shell {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 10px 34px rgba(8, 15, 35, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.premium-nav-shell::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 40%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.03) 55%,
+    transparent 100%
+  );
+}
+
+.premium-nav-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.premium-control-cluster {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 8px 20px rgba(3, 10, 25, 0.2);
+}
+
+.premium-menu-trigger {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 20px rgba(3, 10, 25, 0.2);
+}
+
+.premium-mobile-menu {
+  box-shadow:
+    0 18px 50px rgba(4, 10, 28, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.premium-mobile-menu::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 26%;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.02) 65%,
+    transparent 100%
+  );
+}
+
+.dark .premium-nav-shell::before,
+.dark .premium-mobile-menu::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(255, 255, 255, 0.015) 60%,
+    transparent 100%
+  );
+}
+
+.section-divider > div {
+  position: relative;
+  height: 30px;
+}
+
+.section-divider > div::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--accent) 40%, transparent) 24%,
+    color-mix(in oklab, var(--text-primary) 14%, transparent) 50%,
+    color-mix(in oklab, #22d3ee 36%, transparent) 76%,
+    transparent 100%
+  );
+}
+
+.section-divider > div::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 82px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in oklab, var(--accent) 40%, transparent) 0%,
+    transparent 75%
+  );
+  opacity: 0.8;
+}
+
+.hero-portrait-shell {
+  position: relative;
+}
+
+.hero-portrait-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid color-mix(in oklab, #ffffff 32%, transparent);
+}
+
+.hero-vignette {
+  background:
+    radial-gradient(circle at 24% 16%, rgba(255, 255, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.14), transparent 30%),
+    radial-gradient(circle at 50% 88%, rgba(0, 0, 0, 0.36), transparent 48%);
+}
+
+.dark .hero-vignette {
+  background:
+    radial-gradient(circle at 24% 16%, rgba(255, 255, 255, 0.1), transparent 34%),
+    radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.08), transparent 30%),
+    radial-gradient(circle at 50% 88%, rgba(0, 0, 0, 0.55), transparent 52%);
+}
+
 /* Custom cursor hanya aktif di device non-touch (mouse/trackpad) */
 @media (pointer: fine) {
   body { cursor: none; }
@@ -100,3 +273,53 @@ body {
 .animate-float { animation: float 4s ease-in-out infinite; }
 
 /* ─── Fade-in Stagger handled by Framer Motion ───────────────── */
+
+/* ─── Premium Typography ─────────────────────────────────────── */
+.hero-display {
+  font-size: clamp(2.2rem, 3.8vw + 0.8rem, 4.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  font-weight: 900;
+  text-wrap: balance;
+}
+
+@media (max-width: 420px) {
+  .hero-display {
+    font-size: clamp(1.85rem, 8.2vw, 2.45rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ─── Anchor Offset Fix ────────────────────────────────────── */
+#beranda,
+#proyek,
+#pengalaman,
+#sertifikasi,
+#kontak {
+  scroll-margin-top: 6.75rem;
+}
+
+@media (max-width: 767px) {
+  #beranda,
+  #proyek,
+  #pengalaman,
+  #sertifikasi,
+  #kontak {
+    scroll-margin-top: 5.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .noise-overlay {
+    opacity: 0.06;
+  }
+
+  .section-divider > div {
+    height: 22px;
+  }
+}

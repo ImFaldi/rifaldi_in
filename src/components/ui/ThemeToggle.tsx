@@ -3,18 +3,34 @@
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  compact?: boolean;
+  className?: string;
+}
+
+export function ThemeToggle({ compact = false, className }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
-  if (typeof window === "undefined") return <div className="w-10 h-10" />;
+  const buttonSizeClass = compact ? "h-9 w-9 rounded-lg" : "h-10 w-10 rounded-full";
+  const iconSize = compact ? 16 : 18;
+
+  if (typeof window === "undefined") {
+    return <div className={cn(compact ? "h-9 w-9" : "h-10 w-10", className)} />;
+  }
 
   const isDark = (theme ?? "dark") === "dark";
 
   return (
     <button
+      type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Toggle theme"
-      className="relative w-10 h-10 rounded-full flex items-center justify-center glass-card border-border transition-colors hover:bg-accent-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      className={cn(
+        "relative flex items-center justify-center glass-card border-border transition-colors hover:bg-accent-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+        buttonSizeClass,
+        className
+      )}
     >
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
@@ -26,7 +42,7 @@ export function ThemeToggle() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="absolute"
           >
-            <Moon size={18} className="text-accent" />
+            <Moon size={iconSize} className="text-accent" />
           </motion.span>
         ) : (
           <motion.span
@@ -37,7 +53,7 @@ export function ThemeToggle() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="absolute"
           >
-            <Sun size={18} className="text-accent" />
+            <Sun size={iconSize} className="text-accent" />
           </motion.span>
         )}
       </AnimatePresence>
