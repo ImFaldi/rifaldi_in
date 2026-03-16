@@ -23,9 +23,15 @@ export interface Project {
 interface ProjectCardProps {
   project: Project;
   index?: number;
+  featured?: boolean;
+  labels?: {
+    featured: string;
+    liveDemo: string;
+    source: string;
+  };
 }
 
-export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
+export function ProjectCard({ project, index = 0, featured = false, labels }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const [isHovered, setIsHovered] = useState(false);
@@ -43,6 +49,11 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const glareY = useTransform(mouseY, [-0.5, 0.5], ["0%", "100%"]);
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX} ${glareY}, rgba(255,255,255,0.7), transparent 60%)`;
   const tiltEnabled = canUsePointerTilt && !prefersReducedMotion;
+  const copy = labels ?? {
+    featured: "Featured",
+    liveDemo: "Live Demo",
+    source: "Source",
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(pointer: fine)");
@@ -98,10 +109,12 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             : { transformStyle: "preserve-3d" }
         }
         data-cursor-hover
-        className="glass-card rounded-2xl overflow-hidden group cursor-pointer h-full ring-1 ring-white/12"
+        className={`glass-card rounded-2xl overflow-hidden group cursor-pointer h-full ring-1 ring-white/12 ${
+          featured ? "border-accent/25" : ""
+        }`}
       >
         {/* Gradient Banner */}
-        <div className={`h-36 w-full bg-linear-to-br ${project.gradient} relative`}>
+        <div className={`${featured ? "h-44 sm:h-52" : "h-36"} w-full bg-linear-to-br ${project.gradient} relative`}>
           {/* Glare overlay */}
           <motion.div
             className={`absolute inset-0 transition-opacity duration-300 ${
@@ -133,11 +146,18 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         </div>
 
         {/* Content */}
-        <div className="p-5 flex flex-col gap-3" style={{ transform: "translateZ(20px)" }}>
-          <h3 className="text-text-primary font-bold text-lg leading-tight">
-            {project.title}
-          </h3>
-          <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">
+        <div className={`${featured ? "p-6" : "p-5"} flex flex-col gap-3`} style={{ transform: "translateZ(20px)" }}>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className={`${featured ? "text-xl sm:text-2xl" : "text-lg"} text-text-primary font-bold leading-tight`}>
+              {project.title}
+            </h3>
+            {featured && (
+              <span className="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-accent">
+                {copy.featured}
+              </span>
+            )}
+          </div>
+          <p className={`text-text-secondary text-sm leading-relaxed ${featured ? "line-clamp-3" : "line-clamp-2"}`}>
             {project.description}
           </p>
 
@@ -155,7 +175,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           </div>
 
           {/* Links */}
-          <div className="flex gap-3 pt-1 mt-auto">
+          <div className={`flex gap-3 pt-1 mt-auto ${featured ? "text-sm" : ""}`}>
             {project.href && (
               <a
                 href={project.href}
@@ -164,7 +184,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 className="flex items-center gap-1.5 text-xs text-accent font-semibold hover:underline"
               >
                 <ExternalLink size={13} />
-                Live Demo
+                {copy.liveDemo}
               </a>
             )}
             {project.repo && (
@@ -175,7 +195,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 className="flex items-center gap-1.5 text-xs text-text-secondary font-semibold hover:text-accent transition-colors"
               >
                 <Github size={13} />
-                Source
+                {copy.source}
               </a>
             )}
           </div>
