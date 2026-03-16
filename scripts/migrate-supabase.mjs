@@ -165,25 +165,87 @@ async function migrateProjects() {
   return { inserted, updated, total: projects.length };
 }
 
+async function migrateEducations() {
+  const educations = await readSeedFile("educations.json");
+  let inserted = 0;
+  let updated = 0;
+
+  for (const education of educations) {
+    const { data: existing, error: findError } = await supabase
+      .from("educations")
+      .select("id")
+      .eq("degree", education.degree)
+      .eq("institution", education.institution)
+      .eq("period", education.period)
+      .maybeSingle();
+
+    if (findError) {
+      throw new Error(`Gagal cek education ${education.degree}: ${findError.message}`);
+    }
+
+    if (existing?.id) {
+      const { error: updateError } = await supabase
+        .from("educations")
+        .update({
+          location: education.location,
+          description: education.description,
+          description_en: education.description_en ?? null,
+          status: education.status ?? "published",
+        })
+        .eq("id", existing.id);
+
+      if (updateError) {
+        throw new Error(`Gagal update education ${education.degree}: ${updateError.message}`);
+      }
+
+      updated += 1;
+      continue;
+    }
+
+    const { error: insertError } = await supabase.from("educations").insert({
+      degree: education.degree,
+      institution: education.institution,
+      location: education.location,
+      period: education.period,
+      description: education.description,
+      description_en: education.description_en ?? null,
+      status: education.status ?? "published",
+    });
+
+    if (insertError) {
+      throw new Error(`Gagal insert education ${education.degree}: ${insertError.message}`);
+    }
+
+    inserted += 1;
+  }
+
+  return { inserted, updated, total: educations.length };
+}
+
 async function main() {
-  console.log("[1/4] Cek tabel Supabase...");
+  console.log("[1/5] Cek tabel Supabase...");
   await ensureTableExists("experiences");
   await ensureTableExists("certifications");
   await ensureTableExists("projects");
+  await ensureTableExists("educations");
 
-  console.log("[2/4] Migrasi experiences...");
+  console.log("[2/5] Migrasi experiences...");
   const expResult = await migrateExperiences();
 
-  console.log("[3/4] Migrasi certifications...");
+  console.log("[3/5] Migrasi certifications...");
   const certResult = await migrateCertifications();
 
-  console.log("[4/4] Migrasi projects...");
+  console.log("[4/5] Migrasi projects...");
   const projectResult = await migrateProjects();
+
+  console.log("[5/5] Migrasi educations...");
+  const educationResult = await migrateEducations();
 
   console.log("\nMigrasi selesai.");
   console.log(`Experiences: total ${expResult.total}, inserted ${expResult.inserted}, updated ${expResult.updated}`);
   console.log(`Certifications: total ${certResult.total}, upserted ${certResult.upserted}`);
   console.log(`Projects: total ${projectResult.total}, inserted ${projectResult.inserted}, updated ${projectResult.updated}`);
+  console.log(`Educations: total ${educationResult.total}, inserted ${educationResult.inserted}, updated ${educationResult.updated}`);
 }
 
 main().catch((error) => {

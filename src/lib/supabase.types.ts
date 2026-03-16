@@ -147,6 +147,46 @@ export interface Database {
         };
         Relationships: [];
       };
+      educations: {
+        Row: {
+          id: string;
+          degree: string;
+          institution: string;
+          location: string;
+          period: string;
+          description: string;
+          description_en: string | null;
+          status: "draft" | "review" | "published";
+          deleted_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          degree: string;
+          institution: string;
+          location: string;
+          period: string;
+          description: string;
+          description_en?: string | null;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          degree?: string;
+          institution?: string;
+          location?: string;
+          period?: string;
+          description?: string;
+          description_en?: string | null;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       dashboard_users: {
         Row: {
           id: string;

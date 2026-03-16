@@ -69,6 +69,27 @@ alter table public.projects
 alter table public.projects
   add constraint projects_status_check check (status in ('draft', 'review', 'published'));
 
+create table if not exists public.educations (
+  id uuid primary key default gen_random_uuid(),
+  degree text not null,
+  institution text not null,
+  location text not null,
+  period text not null,
+  description text not null,
+  description_en text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.educations
+  add column if not exists status text not null default 'published',
+  add column if not exists deleted_at timestamptz;
+
+alter table public.educations
+  drop constraint if exists educations_status_check;
+alter table public.educations
+  add constraint educations_status_check check (status in ('draft', 'review', 'published'));
+
 create table if not exists public.dashboard_users (
   id uuid primary key default gen_random_uuid(),
   email text not null unique,
@@ -132,6 +153,11 @@ create trigger trg_projects_updated_at
 before update on public.projects
 for each row execute function public.set_updated_at();
 
+drop trigger if exists trg_educations_updated_at on public.educations;
+create trigger trg_educations_updated_at
+before update on public.educations
+for each row execute function public.set_updated_at();
+
 drop trigger if exists trg_dashboard_users_updated_at on public.dashboard_users;
 create trigger trg_dashboard_users_updated_at
 before update on public.dashboard_users
@@ -140,6 +166,7 @@ for each row execute function public.set_updated_at();
 alter table public.experiences enable row level security;
 alter table public.certifications enable row level security;
 alter table public.projects enable row level security;
+alter table public.educations enable row level security;
 alter table public.dashboard_users enable row level security;
 alter table public.dashboard_audit_logs enable row level security;
 
@@ -147,3 +174,4 @@ alter table public.dashboard_audit_logs enable row level security;
 -- create policy "public_read_experiences" on public.experiences for select using (true);
 -- create policy "public_read_certifications" on public.certifications for select using (true);
 -- create policy "public_read_projects" on public.projects for select using (true);
+-- create policy "public_read_educations" on public.educations for select using (true);

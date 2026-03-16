@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Award, Briefcase, Download, Sparkles } from "lucide-react";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
+import { EducationSection } from "@/components/sections/EducationSection";
 import { CertSection } from "@/components/sections/CertSection";
 import { SitePageNav } from "@/components/layout/SitePageNav";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -34,6 +35,32 @@ export default function ResumePage() {
     lang === "en"
       ? ["Product-focused Engineering", "Scalable Backend Architecture", "Frontend Craft & Performance"]
       : ["Engineering Berorientasi Produk", "Arsitektur Backend Scalable", "Frontend Craft & Performance"];
+
+  const devSkillProgress =
+    lang === "en"
+      ? [
+          { label: "Next.js / React", value: 92 },
+          { label: "Laravel / API Design", value: 88 },
+          { label: "Mobile (Flutter)", value: 82 },
+        ]
+      : [
+          { label: "Next.js / React", value: 92 },
+          { label: "Laravel / Desain API", value: 88 },
+          { label: "Mobile (Flutter)", value: 82 },
+        ];
+
+  const designSkillProgress =
+    lang === "en"
+      ? [
+          { label: "UI Composition", value: 84 },
+          { label: "Design System Thinking", value: 80 },
+          { label: "UX Flow & Prototyping", value: 78 },
+        ]
+      : [
+          { label: "Komposisi UI", value: 84 },
+          { label: "Design System Thinking", value: 80 },
+          { label: "UX Flow & Prototyping", value: 78 },
+        ];
 
   const revealUp = {
     hidden: { opacity: 0, y: 20 },
@@ -146,10 +173,84 @@ export default function ResumePage() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="mt-10 h-px origin-center bg-linear-to-r from-transparent via-border to-transparent"
         />
+
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.25 }}
+          variants={stagger}
+          className="mt-9 grid gap-4 md:grid-cols-2"
+        >
+          <motion.article
+            variants={revealUp}
+            className="rounded-2xl border border-border/90 bg-bg-card/65 p-5 shadow-[0_12px_28px_-20px_rgba(0,0,0,0.65)] backdrop-blur-sm"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">
+              {lang === "en" ? "Dev Skill" : "Dev Skill"}
+            </p>
+            <h3 className="mt-1.5 text-xl font-black tracking-tight text-text-primary">
+              {lang === "en" ? "Engineering Progression" : "Progression Engineering"}
+            </h3>
+            <div className="mt-4 space-y-3">
+              {devSkillProgress.map((skill) => (
+                <div key={skill.label}>
+                  <div className="mb-1.5 flex items-center justify-between text-xs">
+                    <span className="font-medium text-text-primary">{skill.label}</span>
+                    <span className="text-text-secondary">{skill.value}%</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-bg-secondary/70">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.value}%` }}
+                      viewport={{ once: true, amount: 0.8 }}
+                      transition={{ duration: 0.75, ease: "easeOut" }}
+                      className="h-full rounded-full bg-linear-to-r from-accent to-cyan-400"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.article>
+
+          <motion.article
+            variants={revealUp}
+            className="rounded-2xl border border-border/90 bg-bg-card/65 p-5 shadow-[0_12px_28px_-20px_rgba(0,0,0,0.65)] backdrop-blur-sm"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">
+              {lang === "en" ? "Design Skill" : "Design Skill"}
+            </p>
+            <h3 className="mt-1.5 text-xl font-black tracking-tight text-text-primary">
+              {lang === "en" ? "Design Progression" : "Progression Design"}
+            </h3>
+            <div className="mt-4 space-y-3">
+              {designSkillProgress.map((skill) => (
+                <div key={skill.label}>
+                  <div className="mb-1.5 flex items-center justify-between text-xs">
+                    <span className="font-medium text-text-primary">{skill.label}</span>
+                    <span className="text-text-secondary">{skill.value}%</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-bg-secondary/70">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.value}%` }}
+                      viewport={{ once: true, amount: 0.8 }}
+                      transition={{ duration: 0.75, ease: "easeOut" }}
+                      className="h-full rounded-full bg-linear-to-r from-cyan-400 to-accent"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.article>
+        </motion.section>
       </div>
 
       <div className="relative z-10 mt-8 border-y border-border bg-(--bg-card)/20">
         <ExperienceSection />
+      </div>
+
+      <div className="relative z-10 border-b border-border bg-(--bg-card)/10">
+        <EducationSection />
       </div>
 
       <div className="relative z-10 pb-8">

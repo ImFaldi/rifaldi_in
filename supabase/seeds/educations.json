@@ -1,0 +1,20 @@
+[
+  {
+    "degree": "S1 Teknik Informatika",
+    "institution": "Universitas Gunadarma",
+    "location": "Depok, Indonesia",
+    "period": "2016 - 2020",
+    "description": "Fokus pada software engineering, sistem informasi, dan proyek pengembangan web berorientasi produk.",
+    "description_en": "Focused on software engineering, information systems, and product-oriented web development projects.",
+    "status": "published"
+  },
+  {
+    "degree": "Program Intensif Product & UI/UX",
+    "institution": "Program Profesional Mandiri",
+    "location": "Remote",
+    "period": "2021",
+    "description": "Memperdalam product discovery, pemetaan user flow, wireframing, dan design handoff untuk tim development.",
+    "description_en": "Deepened product discovery, user flow mapping, wireframing, and design handoff for development teams.",
+    "status": "published"
+  }
+]

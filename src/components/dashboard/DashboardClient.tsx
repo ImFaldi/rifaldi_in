@@ -10,6 +10,7 @@ import {
   CheckSquare,
   Download,
   FolderKanban,
+  GraduationCap,
   History,
   LogOut,
   Pencil,
@@ -29,7 +30,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-type ResourceName = "experiences" | "certifications" | "projects";
+type ResourceName = "experiences" | "certifications" | "projects" | "educations";
 type WorkflowStatus = "draft" | "review" | "published";
 type UserRole = "admin" | "editor";
 
@@ -149,6 +150,20 @@ const RESOURCE_FIELDS: Record<ResourceName, FieldConfig[]> = {
     { key: "repo", label: "Repository Link", optional: true },
     { key: "gradient", label: "Gradient", optional: true },
   ],
+  educations: [
+    { key: "degree", label: "Degree" },
+    { key: "institution", label: "Institution" },
+    { key: "location", label: "Location" },
+    { key: "period", label: "Period" },
+    {
+      key: "status",
+      label: "Status",
+      type: "select",
+      options: STATUS_OPTIONS,
+    },
+    { key: "description", label: "Description", type: "textarea" },
+    { key: "description_en", label: "Description (EN)", type: "textarea", optional: true },
+  ],
 };
 
 const RESOURCE_META: Record<ResourceName, ResourceMeta> = {
@@ -177,6 +192,15 @@ const RESOURCE_META: Record<ResourceName, ResourceMeta> = {
     icon: FolderKanban,
     titleField: "title",
     subtitleField: "repo",
+    summaryField: "description",
+  },
+  educations: {
+    label: "Educations",
+    subtitle: "Riwayat pendidikan dan pembelajaran formal.",
+    accentClass: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
+    icon: GraduationCap,
+    titleField: "degree",
+    subtitleField: "institution",
     summaryField: "description",
   },
 };
@@ -820,6 +844,12 @@ export function DashboardClient() {
     if (resource === "experiences") {
       const description = stringifyValue(payload.description);
       payload.description_en = await autoTranslate(description);
+    }
+
+    if (resource === "educations") {
+      const description = stringifyValue(payload.description);
+      const manualDescriptionEn = (formValues.description_en ?? "").trim();
+      payload.description_en = manualDescriptionEn || (await autoTranslate(description));
     }
 
     if (resource === "projects") {
