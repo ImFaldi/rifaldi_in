@@ -67,7 +67,12 @@ export const metadata: Metadata = {
     title: "Rifaldi - Full Stack and Mobile Developer",
     description:
       "Membangun produk digital yang cepat dan berdampak dengan Laravel, Next.js, Flutter, dan AI.",
-    images: ["/twitter-image"],
+    images: [
+      {
+        url: "/twitter-image",
+        alt: "Rifaldi Portfolio Cover",
+      },
+    ],
   },
   robots: {
     index: true,
