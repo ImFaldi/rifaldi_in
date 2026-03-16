@@ -4,9 +4,12 @@ import { AUTH_COOKIE_MAX_AGE_SECONDS, AUTH_COOKIE_NAME } from "@/lib/authConstan
 
 const SCRYPT_KEY_LENGTH = 64;
 
+export type DashboardUserRole = "admin" | "editor";
+
 export interface AuthTokenPayload {
   sub: string;
   email: string;
+  role: DashboardUserRole;
   exp: number;
 }
 
@@ -43,11 +46,12 @@ function signTokenParts(headerB64: string, payloadB64: string): string {
   return base64urlEncode(createHmac("sha256", secret).update(content).digest());
 }
 
-export function createAuthToken(userId: string, email: string): string {
+export function createAuthToken(userId: string, email: string, role: DashboardUserRole): string {
   const header = { alg: "HS256", typ: "JWT" };
   const payload: AuthTokenPayload = {
     sub: userId,
     email,
+    role,
     exp: Math.floor(Date.now() / 1000) + AUTH_COOKIE_MAX_AGE_SECONDS,
   };
 
@@ -78,6 +82,9 @@ export function verifyAuthToken(token: string): AuthTokenPayload | null {
 
   try {
     const payload = JSON.parse(base64urlDecode(payloadB64)) as AuthTokenPayload;
+    if (payload.role !== "admin" && payload.role !== "editor") {
+      return null;
+    }
     if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) {
       return null;
     }
@@ -134,15 +141,32 @@ export function getAuthCookieFromRequest(request: NextRequest): string | null {
   return request.cookies.get(AUTH_COOKIE_NAME)?.value ?? null;
 }
 
-export function requireDashboardAuth(request: NextRequest): NextResponse | null {
+export function getDashboardAuthPayload(request: NextRequest): AuthTokenPayload | null {
   const token = getAuthCookieFromRequest(request);
-  if (!token) {
+  if (!token) return null;
+  return verifyAuthToken(token);
+}
+
+export function requireDashboardAuth(request: NextRequest): NextResponse | null {
+  const payload = getDashboardAuthPayload(request);
+  if (!payload) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const payload = verifyAuthToken(token);
+  return null;
+}
+
+export function requireDashboardRole(
+  request: NextRequest,
+  role: DashboardUserRole
+): NextResponse | null {
+  const payload = getDashboardAuthPayload(request);
   if (!payload) {
     return NextResponse.json({ message: "Sesi login tidak valid." }, { status: 401 });
+  }
+
+  if (payload.role !== role) {
+    return NextResponse.json({ message: "Akses ditolak: role tidak sesuai." }, { status: 403 });
   }
 
   return null;

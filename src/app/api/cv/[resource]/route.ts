@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabaseServer";
-import { insertCvResource, isCvResource, listCvResource, sanitizeInsertPayload } from "@/lib/cv";
-import { requireDashboardAuth } from "@/lib/auth";
+import {
+  insertCvResource,
+  isCvResource,
+  listCvResource,
+  sanitizeInsertPayload,
+  validateCvPayload,
+} from "@/lib/cv";
+import { getDashboardAuthPayload, requireDashboardAuth } from "@/lib/auth";
+import { logDashboardAudit } from "@/lib/audit";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   context: { params: Promise<{ resource: string }> }
 ) {
   const { resource } = await context.params;
@@ -15,7 +22,17 @@ export async function GET(
 
   try {
     const supabase = getSupabaseAdminClient();
-    const { data, error } = await listCvResource(supabase, resource);
+    const authPayload = getDashboardAuthPayload(request);
+    const includeDraftsParam = request.nextUrl.searchParams.get("includeDrafts") === "true";
+    const includeDeletedParam = request.nextUrl.searchParams.get("includeDeleted") === "true";
+
+    const includeDrafts = authPayload ? includeDraftsParam : false;
+    const includeDeleted = authPayload ? includeDeletedParam : false;
+
+    const { data, error } = await listCvResource(supabase, resource, {
+      includeDrafts,
+      includeDeleted,
+    });
 
     if (error) {
       return NextResponse.json({ message: error.message }, { status: 500 });
@@ -37,6 +54,11 @@ export async function POST(
   const authError = requireDashboardAuth(request);
   if (authError) return authError;
 
+  const authPayload = getDashboardAuthPayload(request);
+  if (!authPayload) {
+    return NextResponse.json({ message: "Sesi login tidak valid." }, { status: 401 });
+  }
+
   const { resource } = await context.params;
 
   if (!isCvResource(resource)) {
@@ -52,6 +74,11 @@ export async function POST(
   }
 
   const cleanPayload = sanitizeInsertPayload(resource, payload);
+  const validationErrors = validateCvPayload(resource, cleanPayload, "insert");
+
+  if (validationErrors.length) {
+    return NextResponse.json({ message: validationErrors.join(" ") }, { status: 400 });
+  }
 
   try {
     const supabase = getSupabaseAdminClient();
@@ -60,6 +87,14 @@ export async function POST(
     if (error) {
       return NextResponse.json({ message: error.message }, { status: 400 });
     }
+
+    await logDashboardAudit(supabase, {
+      user: authPayload,
+      action: "create",
+      resource,
+      resourceId: data?.id,
+      metadata: { payload: cleanPayload },
+    });
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {

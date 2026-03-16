@@ -20,6 +20,8 @@ export interface Database {
           description: string;
           description_en: string | null;
           tags: string[];
+          status: "draft" | "review" | "published";
+          deleted_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -33,6 +35,8 @@ export interface Database {
           description: string;
           description_en?: string | null;
           tags?: string[];
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -45,6 +49,8 @@ export interface Database {
           description?: string;
           description_en?: string | null;
           tags?: string[];
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
           updated_at?: string;
         };
         Relationships: [];
@@ -60,6 +66,8 @@ export interface Database {
           gradient: string;
           hover_border: string;
           href: string | null;
+          status: "draft" | "review" | "published";
+          deleted_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -73,6 +81,8 @@ export interface Database {
           gradient?: string;
           hover_border?: string;
           href?: string | null;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -85,6 +95,8 @@ export interface Database {
           gradient?: string;
           hover_border?: string;
           href?: string | null;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
           updated_at?: string;
         };
         Relationships: [];
@@ -100,6 +112,8 @@ export interface Database {
           href: string | null;
           repo: string | null;
           gradient: string;
+          status: "draft" | "review" | "published";
+          deleted_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -113,6 +127,8 @@ export interface Database {
           href?: string | null;
           repo?: string | null;
           gradient?: string;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -125,7 +141,68 @@ export interface Database {
           href?: string | null;
           repo?: string | null;
           gradient?: string;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      dashboard_users: {
+        Row: {
+          id: string;
+          email: string;
+          role: "admin" | "editor";
+          password_hash: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          role?: "admin" | "editor";
+          password_hash: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          email?: string;
+          role?: "admin" | "editor";
+          password_hash?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      dashboard_audit_logs: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          user_email: string | null;
+          user_role: string | null;
+          action: string;
+          resource: string;
+          resource_id: string | null;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          user_email?: string | null;
+          user_role?: string | null;
+          action: string;
+          resource: string;
+          resource_id?: string | null;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string | null;
+          user_email?: string | null;
+          user_role?: string | null;
+          action?: string;
+          resource?: string;
+          resource_id?: string | null;
+          metadata?: Json;
         };
         Relationships: [];
       };

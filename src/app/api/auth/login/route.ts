@@ -11,6 +11,7 @@ import { AUTH_COOKIE_MAX_AGE_SECONDS, AUTH_COOKIE_NAME } from "@/lib/authConstan
 type DashboardUser = {
   id: string;
   email: string;
+  role: "admin" | "editor";
   password_hash: string;
 };
 
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     const { data: userData, error } = await supabase
       .from("dashboard_users")
-      .select("id, email, password_hash")
+      .select("id, email, role, password_hash")
       .eq("email", email)
       .maybeSingle();
 
@@ -73,12 +74,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Password salah." }, { status: 401 });
     }
 
-    const token = createAuthToken(user.id, user.email);
+    const token = createAuthToken(user.id, user.email, user.role);
     const response = NextResponse.json({
       message: "Login berhasil.",
       user: {
         id: user.id,
         email: user.email,
+        role: user.role,
       },
     });
 

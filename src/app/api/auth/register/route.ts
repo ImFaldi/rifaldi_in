@@ -11,6 +11,7 @@ import { AUTH_COOKIE_MAX_AGE_SECONDS, AUTH_COOKIE_NAME } from "@/lib/authConstan
 type DashboardUser = {
   id: string;
   email: string;
+  role: "admin" | "editor";
   password_hash: string;
 };
 
@@ -66,13 +67,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Email sudah terdaftar." }, { status: 409 });
     }
 
+    const { count: userCount, error: countError } = await supabase
+      .from("dashboard_users")
+      .select("id", { count: "exact", head: true });
+
+    if (countError) {
+      return NextResponse.json({ message: countError.message }, { status: 500 });
+    }
+
+    const assignedRole: "admin" | "editor" = (userCount ?? 0) === 0 ? "admin" : "editor";
+
     const { data: createdUser, error: insertError } = await supabase
       .from("dashboard_users")
       .insert({
         email,
+        role: assignedRole,
         password_hash: hashPassword(password),
       })
-      .select("id, email, password_hash")
+      .select("id, email, role, password_hash")
       .single();
 
     if (insertError || !createdUser) {
@@ -80,13 +92,14 @@ export async function POST(request: NextRequest) {
     }
 
     const user = createdUser as DashboardUser;
-    const token = createAuthToken(user.id, user.email);
+    const token = createAuthToken(user.id, user.email, user.role);
 
     const response = NextResponse.json({
       message: "Registrasi berhasil.",
       user: {
         id: user.id,
         email: user.email,
+        role: user.role,
       },
     });
 

@@ -8,29 +8,37 @@ const LANGS: Lang[] = ["id", "en"];
 
 export function LanguageToggle() {
   const { lang, setLang } = useLanguage();
+  const isId = lang === "id";
 
   return (
-    <div className="relative flex items-center glass-card border border-border rounded-lg p-0.5">
-      {LANGS.map((l) => (
-        <button
-          key={l}
-          onClick={() => setLang(l)}
-          aria-label={`Switch to ${l.toUpperCase()}`}
-          className={[
-            "relative z-10 px-2.5 py-1 rounded-md text-xs font-bold tracking-wider transition-colors duration-200",
-            lang === l ? "text-white" : "text-text-secondary hover:text-text-primary",
-          ].join(" ")}
-        >
-          {lang === l && (
-            <motion.span
-              layoutId="lang-active"
-              className="absolute inset-0 rounded-md bg-accent"
-              transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            />
-          )}
-          <span className="relative">{l.toUpperCase()}</span>
-        </button>
-      ))}
+    <div className="relative h-10 w-21.5 overflow-hidden rounded-xl border border-border bg-bg-card p-1">
+      <motion.span
+        aria-hidden
+        initial={false}
+        animate={{ x: isId ? 0 : 38 }}
+        transition={{ type: "spring", stiffness: 420, damping: 30 }}
+        className="absolute left-1 top-1 h-8 w-9 rounded-lg bg-accent"
+      />
+
+      <div className="relative z-10 grid h-full grid-cols-2 gap-0.5">
+        {LANGS.map((l) => {
+          const active = lang === l;
+
+          return (
+            <button
+              key={l}
+              onClick={() => setLang(l)}
+              aria-label={`Switch to ${l.toUpperCase()}`}
+              className={[
+                "h-8 rounded-lg text-xs font-bold tracking-wide transition-colors duration-200",
+                active ? "text-white" : "text-text-secondary hover:text-text-primary",
+              ].join(" ")}
+            >
+              {l.toUpperCase()}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
