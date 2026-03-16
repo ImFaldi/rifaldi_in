@@ -157,6 +157,12 @@ export default function HomePage() {
           transition={{ duration: 0.5 }}
           className="flex items-center gap-3"
         >
+          <a
+            href="/auth"
+            className="inline-flex items-center rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-text-primary hover:bg-accent-soft transition-colors"
+          >
+            Dashboard
+          </a>
           <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer"
             aria-label="GitHub" className="text-text-secondary hover:text-accent transition-colors">
             <Github size={18} />

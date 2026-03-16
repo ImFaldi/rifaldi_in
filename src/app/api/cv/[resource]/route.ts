@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabaseServer";
 import { insertCvResource, isCvResource, listCvResource, sanitizeInsertPayload } from "@/lib/cv";
+import { requireDashboardAuth } from "@/lib/auth";
 
 export async function GET(
   _request: NextRequest,
@@ -33,6 +34,9 @@ export async function POST(
   request: NextRequest,
   context: { params: Promise<{ resource: string }> }
 ) {
+  const authError = requireDashboardAuth(request);
+  if (authError) return authError;
+
   const { resource } = await context.params;
 
   if (!isCvResource(resource)) {

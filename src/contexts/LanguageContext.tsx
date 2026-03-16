@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { Lang, Translations, translations } from "@/lib/i18n";
 
 interface LanguageContextType {
@@ -16,12 +16,11 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("id");
-
-  useEffect(() => {
+  const [lang, setLangState] = useState<Lang>(() => {
+    if (typeof window === "undefined") return "id";
     const saved = localStorage.getItem("rifaldi-lang") as Lang | null;
-    if (saved === "id" || saved === "en") setLangState(saved);
-  }, []);
+    return saved === "id" || saved === "en" ? saved : "id";
+  });
 
   function setLang(l: Lang) {
     setLangState(l);

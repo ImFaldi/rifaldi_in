@@ -199,12 +199,14 @@ Isi file `.env.local`:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+AUTH_SECRET=YOUR_RANDOM_LONG_SECRET
 ```
 
 Catatan:
 
 - Gunakan URL project Supabase, bukan URL dashboard.
 - `SUPABASE_SERVICE_ROLE_KEY` hanya dipakai di server (API route + script migrasi).
+- `AUTH_SECRET` dipakai untuk menandatangani session cookie login dashboard.
 
 ### 2) Jalankan SQL Schema
 
@@ -252,6 +254,23 @@ Semua endpoint berada di prefix: `/api/cv`
 - `GET /api/cv/projects/:id`
 - `PATCH /api/cv/projects/:id`
 - `DELETE /api/cv/projects/:id`
+
+Catatan keamanan:
+
+- Operasi `POST`, `PATCH`, `DELETE` sekarang memerlukan login dashboard.
+- Operasi `GET` tetap public agar halaman portfolio tetap bisa fetch data.
+
+### 6) Auth Dashboard + Halaman CRUD
+
+- Halaman auth: `/auth`
+- Halaman dashboard: `/dashboard`
+- API auth:
+   - `POST /api/auth/register`
+   - `POST /api/auth/login`
+   - `POST /api/auth/logout`
+   - `GET /api/auth/me`
+
+Sebelum membuka dashboard, user wajib login/register terlebih dahulu.
 
 ### 5) Integrasi UI
 

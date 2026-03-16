@@ -1,18 +1,14 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  if (typeof window === "undefined") return <div className="w-10 h-10" />;
 
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return <div className="w-10 h-10" />;
-
-  const isDark = theme === "dark";
+  const isDark = (theme ?? "dark") === "dark";
 
   return (
     <button

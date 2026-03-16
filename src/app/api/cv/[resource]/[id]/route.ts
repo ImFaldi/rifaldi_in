@@ -7,6 +7,7 @@ import {
   sanitizeUpdatePayload,
   updateCvResourceById,
 } from "@/lib/cv";
+import { requireDashboardAuth } from "@/lib/auth";
 
 export async function GET(
   _request: NextRequest,
@@ -39,6 +40,9 @@ export async function PATCH(
   request: NextRequest,
   context: { params: Promise<{ resource: string; id: string }> }
 ) {
+  const authError = requireDashboardAuth(request);
+  if (authError) return authError;
+
   const { resource, id } = await context.params;
 
   if (!isCvResource(resource)) {
@@ -73,9 +77,12 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   context: { params: Promise<{ resource: string; id: string }> }
 ) {
+  const authError = requireDashboardAuth(request);
+  if (authError) return authError;
+
   const { resource, id } = await context.params;
 
   if (!isCvResource(resource)) {

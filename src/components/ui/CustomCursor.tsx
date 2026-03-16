@@ -13,15 +13,10 @@ interface Ripple {
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
-  const [isTouch, setIsTouch] = useState(false);
+  const [isTouch] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches
+  );
   const [ripples, setRipples] = useState<Ripple[]>([]);
-
-  // Deteksi touch device sekali saat mount
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) {
-      setIsTouch(true);
-    }
-  }, []);
 
   // Custom cursor — hanya untuk non-touch
   useEffect(() => {

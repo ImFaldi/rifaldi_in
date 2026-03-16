@@ -42,6 +42,14 @@ create table if not exists public.projects (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.dashboard_users (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  password_hash text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
@@ -67,9 +75,15 @@ create trigger trg_projects_updated_at
 before update on public.projects
 for each row execute function public.set_updated_at();
 
+drop trigger if exists trg_dashboard_users_updated_at on public.dashboard_users;
+create trigger trg_dashboard_users_updated_at
+before update on public.dashboard_users
+for each row execute function public.set_updated_at();
+
 alter table public.experiences enable row level security;
 alter table public.certifications enable row level security;
 alter table public.projects enable row level security;
+alter table public.dashboard_users enable row level security;
 
 -- Untuk akses public read-only (frontend), aktifkan kebijakan ini.
 -- create policy "public_read_experiences" on public.experiences for select using (true);
