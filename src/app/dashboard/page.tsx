@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { DashboardClient } from "@/components/dashboard/DashboardClient";
+import { DashboardClient } from "../../components/dashboard/DashboardClient";
 import { verifyAuthToken } from "@/lib/auth";
 import { AUTH_COOKIE_NAME } from "@/lib/authConstants";
 
