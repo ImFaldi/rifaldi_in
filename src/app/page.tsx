@@ -730,7 +730,7 @@ export default function HomePage() {
                   <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-white/20 via-white/0 to-transparent dark:from-white/10" />
                   <div className="hero-vignette pointer-events-none absolute inset-0" />
                   <div className="absolute inset-x-0 bottom-0 h-36 bg-linear-to-t from-black/70 to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5">
+                  <div className="absolute bottom-14 left-5 right-5">
                     <p className="text-white font-bold text-base leading-tight">Rifaldi Indrajaya S.Kom</p>
                     <p className="text-white/70 text-xs mt-1">Full Stack Developer</p>
                   </div>
@@ -738,23 +738,23 @@ export default function HomePage() {
               </div>
 
               <motion.div
-                animate={{ y: [0, -5, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-3 -right-3 z-20 glass-card rounded-xl px-3 py-2 border border-border"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-x-3 bottom-10 z-20"
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs font-bold text-text-primary">{t.hero.floatingAvailable}</span>
+                <div className="glass-card flex items-center justify-between rounded-xl border border-border px-3 py-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs font-semibold text-text-primary">{t.hero.floatingAvailable}</span>
+                  </div>
+                  <div className="h-4 w-px bg-border" />
+                  <div className="text-right">
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-text-secondary">
+                      {t.hero.floatingExp}
+                    </p>
+                    <p className="text-xs font-extrabold text-accent">{t.hero.floatingExpValue}</p>
+                  </div>
                 </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 5, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
-                className="absolute -bottom-3 -left-3 z-20 glass-card rounded-xl px-3 py-2 border border-border"
-              >
-                <p className="text-xs font-medium text-text-secondary">{t.hero.floatingExp}</p>
-                <p className="text-sm font-extrabold text-accent">{t.hero.floatingExpValue}</p>
               </motion.div>
             </div>
           </motion.div>
