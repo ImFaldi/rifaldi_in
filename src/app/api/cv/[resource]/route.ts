@@ -40,6 +40,7 @@ export async function GET(
 
     return NextResponse.json(data ?? []);
   } catch (error) {
+    console.error("[api/cv/[resource] GET]", error);
     return NextResponse.json(
       { message: error instanceof Error ? error.message : "Terjadi kesalahan server." },
       { status: 500 }
@@ -98,6 +99,7 @@ export async function POST(
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
+    console.error("[api/cv/[resource] POST]", error);
     return NextResponse.json(
       { message: error instanceof Error ? error.message : "Terjadi kesalahan server." },
       { status: 500 }
