@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { getSupabaseAdminClient } from "@/lib/supabaseServer";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -45,7 +45,7 @@ export async function generateMetadata({
     const title = `${data.title} | Blog Rifaldi`;
     const description = data.excerpt;
     const canonical = `/blog/${data.slug}`;
-    const imageUrl = data.cover_image || `${SITE_URL}/opengraph-image`;
+    const imageUrl = data.cover_image || `${SITE_URL}/images/profile.jpg?v=3`;
     const publishedTime = new Date(data.published_at).toISOString();
     const modifiedTime = new Date(data.updated_at || data.published_at).toISOString();
 
@@ -96,3 +96,4 @@ export default function BlogSlugLayout({
 }>) {
   return children;
 }
+

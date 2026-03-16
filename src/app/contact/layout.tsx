@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     url: "/contact",
     siteName: SITE_NAME,
     type: "website",
-    images: [{ url: "/opengraph-image" }],
+    images: [{ url: "/images/profile.jpg?v=3" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Contact Rifaldi",
     description: "Hubungi Rifaldi untuk kerja sama proyek dan pengembangan produk digital.",
-    images: ["/twitter-image"],
+    images: ["/images/profile.jpg?v=3"],
   },
 };
 
@@ -28,3 +28,4 @@ export default function ContactLayout({
 }>) {
   return children;
 }
+

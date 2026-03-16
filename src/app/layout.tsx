@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -53,9 +53,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
+        url: "/images/profile.jpg?v=3",
         alt: "Rifaldi Portfolio Cover",
       },
     ],
@@ -69,7 +67,7 @@ export const metadata: Metadata = {
       "Membangun produk digital yang cepat dan berdampak dengan Laravel, Next.js, Flutter, dan AI.",
     images: [
       {
-        url: "/twitter-image",
+        url: "/images/profile.jpg?v=3",
         alt: "Rifaldi Portfolio Cover",
       },
     ],
@@ -119,7 +117,7 @@ const structuredData = {
       url: `${SITE_URL}/`,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/opengraph-image`,
+        url: `${SITE_URL}/images/profile.jpg?v=3`,
       },
       sameAs,
     },
@@ -161,7 +159,7 @@ const structuredData = {
       "@type": "ProfilePage",
       "@id": `${SITE_URL}/#profile-page`,
       url: `${SITE_URL}/`,
-      name: "Rifaldi — Full Stack & Mobile Developer",
+      name: "Rifaldi â€” Full Stack & Mobile Developer",
       isPartOf: {
         "@id": `${SITE_URL}/#website`,
       },
@@ -170,7 +168,7 @@ const structuredData = {
       },
       primaryImageOfPage: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/opengraph-image`,
+        url: `${SITE_URL}/images/profile.jpg?v=3`,
       },
       hasPart: softwareSchemas.map((item) => ({ "@id": item["@id"] })),
       inLanguage: "id-ID",
@@ -198,3 +196,4 @@ export default function RootLayout({
     </html>
   );
 }
+

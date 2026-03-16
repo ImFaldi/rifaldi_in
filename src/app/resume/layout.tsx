@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     url: "/resume",
     siteName: SITE_NAME,
     type: "profile",
-    images: [{ url: "/opengraph-image" }],
+    images: [{ url: "/images/profile.jpg?v=3" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Resume Rifaldi",
     description: "Lihat pengalaman kerja dan rekam jejak profesional Rifaldi.",
-    images: ["/twitter-image"],
+    images: ["/images/profile.jpg?v=3"],
   },
 };
 
@@ -28,3 +28,4 @@ export default function ResumeLayout({
 }>) {
   return children;
 }
+
