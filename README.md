@@ -197,9 +197,32 @@ scripts/
 Isi file `.env.local`:
 
 ```bash
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 AUTH_SECRET=YOUR_RANDOM_LONG_SECRET
+
+NEXT_PUBLIC_SOCIAL_GITHUB=https://github.com/your-username
+NEXT_PUBLIC_SOCIAL_LINKEDIN=https://linkedin.com/in/your-username
+NEXT_PUBLIC_SOCIAL_EMAIL=you@example.com
+
+GITHUB_FEATURED_REPOS=my-app,another-repo
+GITHUB_TOKEN=ghp_xxxxxxxxx
+
+# Contact form email delivery (Resend)
+RESEND_API_KEY=re_xxxxxxxxx
+CONTACT_TO_EMAIL=you@example.com
+CONTACT_FROM_EMAIL=Portfolio Contact <onboarding@resend.dev>
+
+# Contact location (opsional, untuk section alamat + maps)
+NEXT_PUBLIC_CONTACT_ADDRESS=Jakarta, Indonesia
+NEXT_PUBLIC_CONTACT_MAP_EMBED_URL=https://www.google.com/maps?q=Jakarta+Indonesia&output=embed
+NEXT_PUBLIC_CONTACT_MAP_LINK=https://maps.google.com/?q=Jakarta+Indonesia
+
+# Contact fallback (opsional)
+NEXT_PUBLIC_WHATSAPP_NUMBER=628123456789
 ```
 
 Catatan:

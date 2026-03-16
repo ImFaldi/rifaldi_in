@@ -187,6 +187,58 @@ export interface Database {
         };
         Relationships: [];
       };
+      blogs: {
+        Row: {
+          id: string;
+          title: string;
+          title_en: string | null;
+          slug: string;
+          excerpt: string;
+          excerpt_en: string | null;
+          content: string;
+          content_en: string | null;
+          cover_image: string | null;
+          read_time: string;
+          published_at: string;
+          status: "draft" | "review" | "published";
+          deleted_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          title_en?: string | null;
+          slug: string;
+          excerpt: string;
+          excerpt_en?: string | null;
+          content: string;
+          content_en?: string | null;
+          cover_image?: string | null;
+          read_time?: string;
+          published_at?: string;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          title?: string;
+          title_en?: string | null;
+          slug?: string;
+          excerpt?: string;
+          excerpt_en?: string | null;
+          content?: string;
+          content_en?: string | null;
+          cover_image?: string | null;
+          read_time?: string;
+          published_at?: string;
+          status?: "draft" | "review" | "published";
+          deleted_at?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       dashboard_users: {
         Row: {
           id: string;

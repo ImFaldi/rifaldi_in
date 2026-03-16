@@ -222,30 +222,100 @@ async function migrateEducations() {
   return { inserted, updated, total: educations.length };
 }
 
+async function migrateBlogs() {
+  const blogs = await readSeedFile("blogs.json");
+  let inserted = 0;
+  let updated = 0;
+
+  for (const blog of blogs) {
+    const { data: existing, error: findError } = await supabase
+      .from("blogs")
+      .select("id")
+      .eq("slug", blog.slug)
+      .maybeSingle();
+
+    if (findError) {
+      throw new Error(`Gagal cek blog ${blog.slug}: ${findError.message}`);
+    }
+
+    if (existing?.id) {
+      const { error: updateError } = await supabase
+        .from("blogs")
+        .update({
+          title: blog.title,
+          title_en: blog.title_en ?? null,
+          excerpt: blog.excerpt,
+          excerpt_en: blog.excerpt_en ?? null,
+          content: blog.content,
+          content_en: blog.content_en ?? null,
+          cover_image: blog.cover_image ?? null,
+          read_time: blog.read_time ?? "5 min read",
+          published_at: blog.published_at,
+          status: blog.status ?? "published",
+        })
+        .eq("id", existing.id);
+
+      if (updateError) {
+        throw new Error(`Gagal update blog ${blog.slug}: ${updateError.message}`);
+      }
+
+      updated += 1;
+      continue;
+    }
+
+    const { error: insertError } = await supabase.from("blogs").insert({
+      title: blog.title,
+      title_en: blog.title_en ?? null,
+      slug: blog.slug,
+      excerpt: blog.excerpt,
+      excerpt_en: blog.excerpt_en ?? null,
+      content: blog.content,
+      content_en: blog.content_en ?? null,
+      cover_image: blog.cover_image ?? null,
+      read_time: blog.read_time ?? "5 min read",
+      published_at: blog.published_at,
+      status: blog.status ?? "published",
+    });
+
+    if (insertError) {
+      throw new Error(`Gagal insert blog ${blog.slug}: ${insertError.message}`);
+    }
+
+    inserted += 1;
+  }
+
+  return { inserted, updated, total: blogs.length };
+}
+
 async function main() {
-  console.log("[1/5] Cek tabel Supabase...");
+  console.log("[1/6] Cek tabel Supabase...");
   await ensureTableExists("experiences");
   await ensureTableExists("certifications");
   await ensureTableExists("projects");
   await ensureTableExists("educations");
+  await ensureTableExists("blogs");
 
-  console.log("[2/5] Migrasi experiences...");
+  console.log("[2/6] Migrasi experiences...");
   const expResult = await migrateExperiences();
 
-  console.log("[3/5] Migrasi certifications...");
+  console.log("[3/6] Migrasi certifications...");
   const certResult = await migrateCertifications();
 
-  console.log("[4/5] Migrasi projects...");
+  console.log("[4/6] Migrasi projects...");
   const projectResult = await migrateProjects();
 
-  console.log("[5/5] Migrasi educations...");
+  console.log("[5/6] Migrasi educations...");
   const educationResult = await migrateEducations();
+
+  console.log("[6/6] Migrasi blogs...");
+  const blogResult = await migrateBlogs();
 
   console.log("\nMigrasi selesai.");
   console.log(`Experiences: total ${expResult.total}, inserted ${expResult.inserted}, updated ${expResult.updated}`);
   console.log(`Certifications: total ${certResult.total}, upserted ${certResult.upserted}`);
   console.log(`Projects: total ${projectResult.total}, inserted ${projectResult.inserted}, updated ${projectResult.updated}`);
   console.log(`Educations: total ${educationResult.total}, inserted ${educationResult.inserted}, updated ${educationResult.updated}`);
+  console.log(`Blogs: total ${blogResult.total}, inserted ${blogResult.inserted}, updated ${blogResult.updated}`);
 }
 
 main().catch((error) => {

@@ -1,0 +1,41 @@
+[
+  {
+    "title": "Membangun Dashboard CRUD yang Scalable",
+    "title_en": "Building a Scalable CRUD Dashboard",
+    "slug": "membangun-dashboard-crud-yang-scalable",
+    "excerpt": "Catatan teknis tentang arsitektur API, validasi data, dan UX admin panel yang maintainable.",
+    "excerpt_en": "Technical notes on API architecture, data validation, and maintainable admin panel UX.",
+    "content": "Artikel ini membahas pola struktur API modular, validasi payload, audit log, dan strategi workflow draft-review-publish agar dashboard tetap scalable saat fitur bertambah.",
+    "content_en": "This article covers modular API structure patterns, payload validation, audit logs, and draft-review-publish workflows to keep dashboards scalable as features grow.",
+    "cover_image": null,
+    "read_time": "6 min read",
+    "published_at": "2026-03-15T08:00:00.000Z",
+    "status": "published"
+  },
+  {
+    "title": "Next.js App Router untuk Portfolio Modern",
+    "title_en": "Next.js App Router for Modern Portfolios",
+    "slug": "nextjs-app-router-untuk-portfolio-modern",
+    "excerpt": "Strategi struktur halaman, SEO metadata route, dan performa animasi di production.",
+    "excerpt_en": "Page structuring strategies, route-level SEO metadata, and production animation performance.",
+    "content": "Kita akan melihat bagaimana segment routing, metadata dinamis, dan optimasi komponen client/server menghasilkan website portfolio yang cepat, rapi, dan mudah dikembangkan.",
+    "content_en": "We will explore how segment routing, dynamic metadata, and client/server component optimization produce fast, clean, and extensible portfolio websites.",
+    "cover_image": null,
+    "read_time": "5 min read",
+    "published_at": "2026-02-19T08:00:00.000Z",
+    "status": "published"
+  },
+  {
+    "title": "Integrasi AI Agents pada Produk Nyata",
+    "title_en": "Integrating AI Agents into Real Products",
+    "slug": "integrasi-ai-agents-pada-produk-nyata",
+    "excerpt": "Praktik implementasi agen AI yang aman, terukur, dan relevan untuk use-case bisnis.",
+    "excerpt_en": "Practical implementation of AI agents that is safe, measurable, and relevant for business use cases.",
+    "content": "Mulai dari pemilihan task, guardrail, evaluasi kualitas output, hingga observability, artikel ini merangkum langkah implementasi AI agent agar benar-benar menghasilkan value.",
+    "content_en": "From task selection and guardrails to output quality evaluation and observability, this article summarizes implementation steps for AI agents that deliver real value.",
+    "cover_image": null,
+    "read_time": "7 min read",
+    "published_at": "2026-01-27T08:00:00.000Z",
+    "status": "published"
+  }
+]

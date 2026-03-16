@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase.types";
 
-export const CV_RESOURCES = ["experiences", "certifications", "projects", "educations"] as const;
+export const CV_RESOURCES = ["experiences", "certifications", "projects", "educations", "blogs"] as const;
 
 export type CvResource = (typeof CV_RESOURCES)[number];
 export type CvStatus = "draft" | "review" | "published";
@@ -62,6 +62,19 @@ const ALLOWED_FIELDS: Record<CvResource, readonly string[]> = {
     "description_en",
     "status",
   ],
+  blogs: [
+    "title",
+    "title_en",
+    "slug",
+    "excerpt",
+    "excerpt_en",
+    "content",
+    "content_en",
+    "cover_image",
+    "read_time",
+    "published_at",
+    "status",
+  ],
 };
 
 const REQUIRED_FIELDS: Record<CvResource, readonly string[]> = {
@@ -69,6 +82,7 @@ const REQUIRED_FIELDS: Record<CvResource, readonly string[]> = {
   certifications: ["name", "issuer", "date", "credential_id"],
   projects: ["title", "description"],
   educations: ["degree", "institution", "location", "period", "description"],
+  blogs: ["title", "slug", "excerpt", "content", "read_time"],
 };
 
 function normalizeTags(input: unknown): string[] | undefined {
@@ -123,7 +137,9 @@ export function sanitizeInsertPayload<K extends CvResource>(
       continue;
     }
 
-    if (["href", "repo", "title_en", "description_en"].includes(field)) {
+    if (
+      ["href", "repo", "title_en", "description_en", "excerpt_en", "content_en", "cover_image"].includes(field)
+    ) {
       const value = normalizeNullableString(payload[field]);
       if (value !== undefined) clean[field] = value;
       continue;
@@ -199,6 +215,12 @@ export async function listCvResource<K extends CvResource>(
       if (!includeDeleted) query = query.is("deleted_at", null);
       return query.order("updated_at", { ascending: false });
     }
+    case "blogs": {
+      let query = client.from("blogs").select("*");
+      if (!includeDrafts) query = query.eq("status", "published");
+      if (!includeDeleted) query = query.is("deleted_at", null);
+      return query.order("published_at", { ascending: false });
+    }
   }
 }
 
@@ -216,6 +238,8 @@ export async function insertCvResource<K extends CvResource>(
       return client.from("projects").insert(payload as InsertMap["projects"]).select("*").single();
     case "educations":
       return client.from("educations").insert(payload as InsertMap["educations"]).select("*").single();
+    case "blogs":
+      return client.from("blogs").insert(payload as InsertMap["blogs"]).select("*").single();
   }
 }
 
@@ -233,6 +257,8 @@ export async function getCvResourceById<K extends CvResource>(
       return client.from("projects").select("*").eq("id", id).single();
     case "educations":
       return client.from("educations").select("*").eq("id", id).single();
+    case "blogs":
+      return client.from("blogs").select("*").eq("id", id).single();
   }
 }
 
@@ -271,6 +297,13 @@ export async function updateCvResourceById<K extends CvResource>(
         .eq("id", id)
         .select("*")
         .single();
+    case "blogs":
+      return client
+        .from("blogs")
+        .update(payload as UpdateMap["blogs"])
+        .eq("id", id)
+        .select("*")
+        .single();
   }
 }
 
@@ -290,6 +323,8 @@ export async function softDeleteCvResourceById<K extends CvResource>(
       return client.from("projects").update(payload).eq("id", id);
     case "educations":
       return client.from("educations").update(payload).eq("id", id);
+    case "blogs":
+      return client.from("blogs").update(payload).eq("id", id);
   }
 }
 
@@ -309,5 +344,7 @@ export async function restoreCvResourceById<K extends CvResource>(
       return client.from("projects").update(payload).eq("id", id).select("*").single();
     case "educations":
       return client.from("educations").update(payload).eq("id", id).select("*").single();
+    case "blogs":
+      return client.from("blogs").update(payload).eq("id", id).select("*").single();
   }
 }

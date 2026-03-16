@@ -6,19 +6,21 @@ import { usePathname } from "next/navigation";
 import { ChevronRight, Menu, X } from "lucide-react";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Resume", href: "/resume" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function SitePageNav() {
   const pathname = usePathname();
+  const { lang, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const NAV_LINKS = t.nav.links;
+
+  const ui = {
+    navTitle: lang === "en" ? "Navigation" : "Navigasi",
+    navSubtitle: lang === "en" ? "Explore Pages" : "Jelajahi Halaman",
+    openMenu: lang === "en" ? "Open menu" : "Buka menu",
+    closeMenu: lang === "en" ? "Close menu" : "Tutup menu",
+    closeOverlay: lang === "en" ? "Close menu overlay" : "Tutup overlay menu",
+  };
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -60,7 +62,7 @@ export function SitePageNav() {
           <ThemeToggle compact />
           <button
             type="button"
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={mobileMenuOpen ? ui.closeMenu : ui.openMenu}
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             className="premium-menu-trigger inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-bg-card/70 text-text-primary transition-colors hover:bg-accent-soft md:hidden"
@@ -79,7 +81,7 @@ export function SitePageNav() {
       >
         <button
           type="button"
-          aria-label="Close menu overlay"
+          aria-label={ui.closeOverlay}
           onClick={() => setMobileMenuOpen(false)}
           className="absolute inset-0 h-full w-full bg-black/45"
         />
@@ -91,8 +93,8 @@ export function SitePageNav() {
         >
           <div className="relative flex items-center justify-between rounded-2xl border border-border/80 bg-bg-card/65 px-4 py-3">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-secondary">Navigation</p>
-              <p className="mt-0.5 text-sm font-bold text-text-primary">Explore Pages</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-secondary">{ui.navTitle}</p>
+              <p className="mt-0.5 text-sm font-bold text-text-primary">{ui.navSubtitle}</p>
             </div>
           </div>
 

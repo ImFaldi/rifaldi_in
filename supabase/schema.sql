@@ -90,6 +90,31 @@ alter table public.educations
 alter table public.educations
   add constraint educations_status_check check (status in ('draft', 'review', 'published'));
 
+create table if not exists public.blogs (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  title_en text,
+  slug text not null unique,
+  excerpt text not null,
+  excerpt_en text,
+  content text not null,
+  content_en text,
+  cover_image text,
+  read_time text not null default '5 min read',
+  published_at timestamptz not null default now(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.blogs
+  add column if not exists status text not null default 'published',
+  add column if not exists deleted_at timestamptz;
+
+alter table public.blogs
+  drop constraint if exists blogs_status_check;
+alter table public.blogs
+  add constraint blogs_status_check check (status in ('draft', 'review', 'published'));
+
 create table if not exists public.dashboard_users (
   id uuid primary key default gen_random_uuid(),
   email text not null unique,
@@ -158,6 +183,11 @@ create trigger trg_educations_updated_at
 before update on public.educations
 for each row execute function public.set_updated_at();
 
+drop trigger if exists trg_blogs_updated_at on public.blogs;
+create trigger trg_blogs_updated_at
+before update on public.blogs
+for each row execute function public.set_updated_at();
+
 drop trigger if exists trg_dashboard_users_updated_at on public.dashboard_users;
 create trigger trg_dashboard_users_updated_at
 before update on public.dashboard_users
@@ -167,6 +197,7 @@ alter table public.experiences enable row level security;
 alter table public.certifications enable row level security;
 alter table public.projects enable row level security;
 alter table public.educations enable row level security;
+alter table public.blogs enable row level security;
 alter table public.dashboard_users enable row level security;
 alter table public.dashboard_audit_logs enable row level security;
 
@@ -175,3 +206,4 @@ alter table public.dashboard_audit_logs enable row level security;
 -- create policy "public_read_certifications" on public.certifications for select using (true);
 -- create policy "public_read_projects" on public.projects for select using (true);
 -- create policy "public_read_educations" on public.educations for select using (true);
+-- create policy "public_read_blogs" on public.blogs for select using (true);

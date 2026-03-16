@@ -80,12 +80,12 @@ export const translations: Record<Lang, Translations> = {
   id: {
     nav: {
       links: [
-        { label: "Home",      href: "/" },
-        { label: "About",     href: "/about" },
+        { label: "Beranda",   href: "/" },
+        { label: "Tentang",   href: "/about" },
         { label: "Resume",    href: "/resume" },
-        { label: "Portfolio", href: "/portfolio" },
+        { label: "Portofolio", href: "/portfolio" },
         { label: "Blog",      href: "/blog" },
-        { label: "Contact",   href: "/contact" },
+        { label: "Kontak",    href: "/contact" },
       ],
     },
     hero: {

@@ -13,6 +13,7 @@ import {
   GraduationCap,
   History,
   LogOut,
+  NotebookText,
   Pencil,
   Plus,
   RefreshCw,
@@ -30,7 +31,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-type ResourceName = "experiences" | "certifications" | "projects" | "educations";
+type ResourceName = "experiences" | "certifications" | "projects" | "educations" | "blogs";
 type WorkflowStatus = "draft" | "review" | "published";
 type UserRole = "admin" | "editor";
 
@@ -164,6 +165,24 @@ const RESOURCE_FIELDS: Record<ResourceName, FieldConfig[]> = {
     { key: "description", label: "Description", type: "textarea" },
     { key: "description_en", label: "Description (EN)", type: "textarea", optional: true },
   ],
+  blogs: [
+    { key: "title", label: "Title" },
+    { key: "slug", label: "Slug" },
+    { key: "read_time", label: "Read Time" },
+    { key: "published_at", label: "Published At (ISO)" },
+    {
+      key: "status",
+      label: "Status",
+      type: "select",
+      options: STATUS_OPTIONS,
+    },
+    { key: "excerpt", label: "Excerpt", type: "textarea" },
+    { key: "content", label: "Content", type: "textarea" },
+    { key: "cover_image", label: "Cover Image URL", optional: true },
+    { key: "title_en", label: "Title (EN)", optional: true },
+    { key: "excerpt_en", label: "Excerpt (EN)", type: "textarea", optional: true },
+    { key: "content_en", label: "Content (EN)", type: "textarea", optional: true },
+  ],
 };
 
 const RESOURCE_META: Record<ResourceName, ResourceMeta> = {
@@ -202,6 +221,15 @@ const RESOURCE_META: Record<ResourceName, ResourceMeta> = {
     titleField: "degree",
     subtitleField: "institution",
     summaryField: "description",
+  },
+  blogs: {
+    label: "Blogs",
+    subtitle: "Artikel, insight, dan catatan teknis.",
+    accentClass: "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/30",
+    icon: NotebookText,
+    titleField: "title",
+    subtitleField: "slug",
+    summaryField: "excerpt",
   },
 };
 
@@ -859,6 +887,20 @@ export function DashboardClient() {
       payload.description_en = await autoTranslate(description);
     }
 
+    if (resource === "blogs") {
+      const title = stringifyValue(payload.title);
+      const excerpt = stringifyValue(payload.excerpt);
+      const content = stringifyValue(payload.content);
+
+      const manualTitleEn = (formValues.title_en ?? "").trim();
+      const manualExcerptEn = (formValues.excerpt_en ?? "").trim();
+      const manualContentEn = (formValues.content_en ?? "").trim();
+
+      payload.title_en = manualTitleEn || (await autoTranslate(title));
+      payload.excerpt_en = manualExcerptEn || (await autoTranslate(excerpt));
+      payload.content_en = manualContentEn || (await autoTranslate(content));
+    }
+
     return payload;
   }
 
@@ -1105,7 +1147,7 @@ export function DashboardClient() {
       return;
     }
 
-    if (resource === "projects" && formValues.title) {
+    if ((resource === "projects" || resource === "blogs") && formValues.title) {
       const translated = await autoTranslate(formValues.title);
       pushToast(`Preview title EN: ${translated.slice(0, 40)}${translated.length > 40 ? "..." : ""}`, "info");
       return;
