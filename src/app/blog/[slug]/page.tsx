@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, CalendarDays, Clock3, Languages } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 type BlogItem = {
   id: string;
@@ -170,8 +171,76 @@ export default function BlogPostPage() {
     post && isEn && post.title_en && post.excerpt_en && post.content_en ? "en" : "id";
   const targetLangForArticle: "id" | "en" = sourceLangForArticle === "id" ? "en" : "id";
 
+  const articleStructuredData = useMemo(() => {
+    if (!post) return null;
+
+    const canonical = `${SITE_URL}/blog/${encodeURIComponent(post.slug)}`;
+    const title = post.title;
+    const description = post.excerpt;
+
+    return {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "@id": `${canonical}#article`,
+          mainEntityOfPage: canonical,
+          headline: title,
+          description,
+          datePublished: post.published_at,
+          dateModified: post.published_at,
+          inLanguage: "id-ID",
+          url: canonical,
+          author: {
+            "@type": "Person",
+            name: "Rifaldi",
+            url: SITE_URL,
+          },
+          publisher: {
+            "@type": "Organization",
+            name: SITE_NAME,
+            url: SITE_URL,
+            logo: {
+              "@type": "ImageObject",
+              url: `${SITE_URL}/opengraph-image`,
+            },
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: SITE_URL,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Blog",
+              item: `${SITE_URL}/blog`,
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: title,
+              item: canonical,
+            },
+          ],
+        },
+      ],
+    };
+  }, [post]);
+
   return (
     <main className="ambient-grid relative min-h-screen overflow-hidden bg-bg-primary px-4 pb-20 pt-20 text-text-primary sm:px-6">
+      {articleStructuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleStructuredData) }}
+        />
+      )}
       <div className="pointer-events-none absolute -left-32 top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-60 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
       <div className="noise-overlay pointer-events-none absolute inset-0" />

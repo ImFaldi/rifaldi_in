@@ -20,17 +20,33 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Rifaldi — Full Stack & Mobile Developer",
+  applicationName: SITE_NAME,
+  title: {
+    default: "Rifaldi - Full Stack and Mobile Developer",
+    template: "%s | Rifaldi",
+  },
   description:
-    "Portofolio pribadi Rifaldi: Full Stack Developer spesialis Laravel, Next.js, Flutter, dan AI Agents. Membangun produk digital yang berdampak.",
-  keywords: ["portfolio", "rifaldi", "next.js", "laravel", "flutter", "developer"],
+    "Portofolio Rifaldi, Full Stack and Mobile Developer. Spesialis Laravel, Next.js, Flutter, dan AI agents untuk membangun produk digital yang cepat dan berdampak.",
+  keywords: [
+    "rifaldi",
+    "portfolio developer",
+    "full stack developer indonesia",
+    "mobile developer flutter",
+    "next.js developer",
+    "laravel developer",
+    "ai agents",
+  ],
+  category: "technology",
+  authors: [{ name: "Rifaldi", url: SITE_URL }],
+  creator: "Rifaldi",
+  publisher: SITE_NAME,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Rifaldi — Full Stack & Mobile Developer",
+    title: "Rifaldi - Full Stack and Mobile Developer",
     description:
-      "Portofolio pribadi Rifaldi: Full Stack Developer spesialis Laravel, Next.js, Flutter, dan AI Agents.",
+      "Portofolio Rifaldi: Full Stack and Mobile Developer dengan fokus Laravel, Next.js, Flutter, dan AI agents.",
     url: "/",
     siteName: SITE_NAME,
     locale: "id_ID",
@@ -46,14 +62,24 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rifaldi — Full Stack & Mobile Developer",
+    site: "@rifaldi",
+    creator: "@rifaldi",
+    title: "Rifaldi - Full Stack and Mobile Developer",
     description:
-      "Membangun produk digital yang cepat, indah, dan berdampak dengan Laravel, Next.js, Flutter, dan AI.",
+      "Membangun produk digital yang cepat dan berdampak dengan Laravel, Next.js, Flutter, dan AI.",
     images: ["/twitter-image"],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -82,6 +108,17 @@ const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: `${SITE_URL}/`,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/opengraph-image`,
+      },
+      sameAs,
+    },
+    {
       "@type": "Person",
       "@id": `${SITE_URL}/#person`,
       name: "Rifaldi",
@@ -106,7 +143,12 @@ const structuredData = {
       url: `${SITE_URL}/`,
       name: "Rifaldi Portfolio",
       publisher: {
-        "@id": `${SITE_URL}/#person`,
+        "@id": `${SITE_URL}/#organization`,
+      },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${SITE_URL}/blog?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
       },
       inLanguage: "id-ID",
     },

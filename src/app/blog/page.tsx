@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, BookOpenText, Sparkles } from "lucide-react";
 import { SitePageNav } from "@/components/layout/SitePageNav";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 interface BlogItem {
   id: string;
@@ -90,6 +91,46 @@ export default function BlogPage() {
 
   const featuredPost = filteredPosts[0];
 
+  const blogStructuredData = useMemo(() => {
+    const itemList = localizedPosts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${SITE_URL}/blog/${encodeURIComponent(post.slug)}`,
+      name: post.title,
+    }));
+
+    return {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Blog",
+          "@id": `${SITE_URL}/blog#blog`,
+          name: "Blog Rifaldi",
+          description:
+            "Kumpulan artikel teknis tentang software engineering, web development, mobile development, dan AI.",
+          url: `${SITE_URL}/blog`,
+          inLanguage: isEn ? "en-US" : "id-ID",
+          publisher: {
+            "@type": "Organization",
+            name: SITE_NAME,
+            url: SITE_URL,
+          },
+          blogPost: localizedPosts.slice(0, 20).map((post) => ({
+            "@type": "BlogPosting",
+            headline: post.title,
+            url: `${SITE_URL}/blog/${encodeURIComponent(post.slug)}`,
+            datePublished: post.published_at,
+          })),
+        },
+        {
+          "@type": "ItemList",
+          "@id": `${SITE_URL}/blog#itemlist`,
+          itemListElement: itemList,
+        },
+      ],
+    };
+  }, [isEn, localizedPosts]);
+
   function formatDate(value: string) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return value;
@@ -103,6 +144,10 @@ export default function BlogPage() {
 
   return (
     <main className="ambient-grid relative min-h-screen overflow-hidden bg-bg-primary px-4 pb-20 pt-32 text-text-primary sm:px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogStructuredData) }}
+      />
       <div className="pointer-events-none absolute -left-32 top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-60 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
       <div className="noise-overlay pointer-events-none absolute inset-0" />
