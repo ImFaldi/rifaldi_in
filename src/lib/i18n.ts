@@ -80,10 +80,12 @@ export const translations: Record<Lang, Translations> = {
   id: {
     nav: {
       links: [
-        { label: "Proyek",      href: "#proyek" },
-        { label: "Pengalaman",  href: "#pengalaman" },
-        { label: "Sertifikasi", href: "#sertifikasi" },
-        { label: "Kontak",      href: "#kontak" },
+        { label: "Home",      href: "/" },
+        { label: "About",     href: "/about" },
+        { label: "Resume",    href: "/resume" },
+        { label: "Portfolio", href: "/portfolio" },
+        { label: "Blog",      href: "/blog" },
+        { label: "Contact",   href: "/contact" },
       ],
     },
     hero: {
@@ -160,10 +162,12 @@ export const translations: Record<Lang, Translations> = {
   en: {
     nav: {
       links: [
-        { label: "Projects",       href: "#proyek" },
-        { label: "Experience",     href: "#pengalaman" },
-        { label: "Certifications", href: "#sertifikasi" },
-        { label: "Contact",        href: "#kontak" },
+        { label: "Home",      href: "/" },
+        { label: "About",     href: "/about" },
+        { label: "Resume",    href: "/resume" },
+        { label: "Portfolio", href: "/portfolio" },
+        { label: "Blog",      href: "/blog" },
+        { label: "Contact",   href: "/contact" },
       ],
     },
     hero: {

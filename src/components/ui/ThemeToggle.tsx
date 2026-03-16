@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
@@ -12,12 +13,13 @@ interface ThemeToggleProps {
 
 export function ThemeToggle({ compact = false, className }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const buttonSizeClass = compact ? "h-9 w-9 rounded-lg" : "h-10 w-10 rounded-full";
   const iconSize = compact ? 16 : 18;
-
-  if (typeof window === "undefined") {
-    return <div className={cn(compact ? "h-9 w-9" : "h-10 w-10", className)} />;
-  }
 
   const isDark = (theme ?? "dark") === "dark";
 
@@ -32,6 +34,9 @@ export function ThemeToggle({ compact = false, className }: ThemeToggleProps) {
         className
       )}
     >
+      {!mounted ? (
+        <span className="h-4 w-4" aria-hidden />
+      ) : (
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
           <motion.span
@@ -57,6 +62,7 @@ export function ThemeToggle({ compact = false, className }: ThemeToggleProps) {
           </motion.span>
         )}
       </AnimatePresence>
+      )}
     </button>
   );
 }

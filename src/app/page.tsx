@@ -10,7 +10,9 @@ import {
   useTransform,
 } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   ArrowUpRight,
   Mail,
@@ -22,10 +24,6 @@ import {
   Quote,
   Rocket,
   Timer,
-  Home,
-  FolderKanban,
-  Briefcase,
-  Award,
   Menu,
   X,
 } from "lucide-react";
@@ -96,10 +94,10 @@ const mobileMenuItem = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   const { t, lang } = useLanguage();
+  const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
-  const [activeDockSection, setActiveDockSection] = useState("beranda");
   const [isFinePointer, setIsFinePointer] = useState(false);
   const [showFloatingDashboard, setShowFloatingDashboard] = useState(true);
 
@@ -143,42 +141,44 @@ export default function HomePage() {
       if (isMounted) setProjectsLoading(true);
 
       try {
-        const dbRes = await fetch("/api/cv/projects");
-        if (dbRes.ok) {
-          const dbData = (await dbRes.json()) as DatabaseProject[];
-          if (isMounted && Array.isArray(dbData) && dbData.length) {
-            setDatabaseProjects(dbData);
+        try {
+          const dbRes = await fetch("/api/cv/projects");
+          if (dbRes.ok) {
+            const dbData = (await dbRes.json()) as DatabaseProject[];
+            if (isMounted && Array.isArray(dbData) && dbData.length) {
+              setDatabaseProjects(dbData);
+              return;
+            }
+          }
+        } catch {
+          // fallback ke GitHub
+        }
+
+        try {
+          const githubRes = await fetch("/api/repos");
+          const repos = (await githubRes.json()) as GithubRepo[];
+          if (!isMounted || !Array.isArray(repos) || !repos.length) {
+            if (isMounted) setGithubProjects([]);
             return;
           }
-        }
-      } catch {
-        // fallback ke GitHub
-      }
 
-      try {
-        const githubRes = await fetch("/api/repos");
-        const repos = (await githubRes.json()) as GithubRepo[];
-        if (!isMounted || !Array.isArray(repos) || !repos.length) {
+          setGithubProjects(
+            repos.map((repo, i) => ({
+              title: formatRepoName(repo.name),
+              description: repo.description ?? "",
+              tags: repo.topics.length
+                ? repo.topics
+                : repo.language
+                ? [repo.language]
+                : [],
+              href: repo.homepage || undefined,
+              repo: repo.html_url,
+              gradient: REPO_GRADIENTS[i % REPO_GRADIENTS.length],
+            }))
+          );
+        } catch {
           if (isMounted) setGithubProjects([]);
-          return;
         }
-
-        setGithubProjects(
-          repos.map((repo, i) => ({
-            title: formatRepoName(repo.name),
-            description: repo.description ?? "",
-            tags: repo.topics.length
-              ? repo.topics
-              : repo.language
-              ? [repo.language]
-              : [],
-            href: repo.homepage || undefined,
-            repo: repo.html_url,
-            gradient: REPO_GRADIENTS[i % REPO_GRADIENTS.length],
-          }))
-        );
-      } catch {
-        if (isMounted) setGithubProjects([]);
       } finally {
         if (isMounted) setProjectsLoading(false);
       }
@@ -225,35 +225,6 @@ export default function HomePage() {
   }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (mobileMenuOpen) return;
-
-    const sectionIds = ["beranda", "proyek", "pengalaman", "sertifikasi", "kontak"];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (visible[0]?.target?.id) {
-          setActiveDockSection(visible[0].target.id);
-        }
-      },
-      {
-        root: null,
-        rootMargin: "-35% 0px -50% 0px",
-        threshold: [0.2, 0.45, 0.7],
-      }
-    );
-
-    for (const sectionId of sectionIds) {
-      const section = document.getElementById(sectionId);
-      if (section) observer.observe(section);
-    }
-
-    return () => observer.disconnect();
-  }, [mobileMenuOpen]);
-
-  useEffect(() => {
     if (prefersReducedMotion) return;
 
     let lastY = window.scrollY;
@@ -287,17 +258,6 @@ export default function HomePage() {
       window.removeEventListener("scroll", onScroll);
     };
   }, [prefersReducedMotion]);
-
-  const mobileDockItems = useMemo(
-    () => [
-      { id: "beranda", label: "Home", icon: Home },
-      { id: "proyek", label: "Proyek", icon: FolderKanban },
-      { id: "pengalaman", label: "Karier", icon: Briefcase },
-      { id: "sertifikasi", label: "Sertif", icon: Award },
-      { id: "kontak", label: "Kontak", icon: Mail },
-    ],
-    []
-  );
 
   const projects: Project[] = databaseProjects?.length
     ? databaseProjects.map((project, i) => ({
@@ -427,23 +387,21 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="hidden md:flex items-center gap-3 justify-self-start"
           >
-            <a
-              href="#beranda"
-              className="font-bold text-text-primary text-lg tracking-tight"
-            >
+            <Link href="/" className="font-bold text-text-primary text-lg tracking-tight">
               rifaldi<span className="text-accent">.</span>
-            </a>
+            </Link>
           </motion.div>
 
-          <motion.a
-            href="#beranda"
+          <motion.div
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             className="justify-self-start font-bold text-text-primary text-lg tracking-tight md:hidden"
           >
-            rifaldi<span className="text-accent">.</span>
-          </motion.a>
+            <Link href="/">
+              rifaldi<span className="text-accent">.</span>
+            </Link>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: -8 }}
@@ -452,21 +410,16 @@ export default function HomePage() {
             className="hidden md:flex items-center gap-6 justify-self-center"
           >
             {t.nav.links.map((link) => (
-              (() => {
-                const linkId = link.href.replace("#", "");
-                const isActive = activeDockSection === linkId;
-
-                return (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 className={`relative rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors duration-200 ${
-                  isActive
+                  pathname === link.href
                     ? "text-text-primary"
                     : "text-text-secondary hover:text-text-primary"
                 }`}
               >
-                {isActive && (
+                {pathname === link.href && (
                   <motion.span
                     layoutId="desktop-nav-pill"
                     className="absolute inset-0 -z-10 rounded-lg bg-accent-soft/70"
@@ -474,9 +427,7 @@ export default function HomePage() {
                   />
                 )}
                 {link.label}
-              </a>
-                );
-              })()
+              </Link>
             ))}
           </motion.div>
 
@@ -550,29 +501,32 @@ export default function HomePage() {
                 </p>
                 <motion.div variants={mobileMenuList} initial="hidden" animate="show" className="grid grid-cols-2 gap-2">
                   {t.nav.links.map((link) => {
-                    const isActive = activeDockSection === link.href.replace("#", "");
+                    const isActive = pathname === link.href;
 
                     return (
-                      <motion.a
+                      <motion.div
                         variants={mobileMenuItem}
                         key={`mobile-${link.href}`}
-                        href={link.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`relative rounded-xl border px-3 py-2 text-sm font-semibold transition-colors ${
-                          isActive
-                            ? "border-accent/30 text-text-primary"
-                            : "border-border text-text-primary hover:bg-accent-soft"
-                        }`}
                       >
-                        {isActive && (
-                          <motion.span
-                            layoutId="mobile-menu-pill"
-                            className="absolute inset-0 -z-10 rounded-xl bg-accent-soft"
-                            transition={{ type: "spring", stiffness: 260, damping: 28 }}
-                          />
-                        )}
-                        {link.label}
-                      </motion.a>
+                        <Link
+                          href={link.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`relative block rounded-xl border px-3 py-2 text-sm font-semibold transition-colors ${
+                            isActive
+                              ? "border-accent/30 text-text-primary"
+                              : "border-border text-text-primary hover:bg-accent-soft"
+                          }`}
+                        >
+                          {isActive && (
+                            <motion.span
+                              layoutId="mobile-menu-pill"
+                              className="absolute inset-0 -z-10 rounded-xl bg-accent-soft"
+                              transition={{ type: "spring", stiffness: 260, damping: 28 }}
+                            />
+                          )}
+                          {link.label}
+                        </Link>
+                      </motion.div>
                     );
                   })}
                 </motion.div>
@@ -1172,37 +1126,6 @@ export default function HomePage() {
       >
         Dashboard <ArrowUpRight size={14} />
       </motion.a>
-
-      <div className={`fixed inset-x-0 bottom-4 z-50 px-4 transition-all duration-200 sm:hidden ${mobileMenuOpen ? "pointer-events-none opacity-0" : "opacity-100"}`}>
-        <div className="mx-auto grid max-w-md grid-cols-5 gap-2 rounded-2xl border border-border bg-bg-card/90 p-2 shadow-[0_10px_40px_rgba(2,6,23,0.22)] ring-1 ring-white/10 backdrop-blur-xl">
-          {mobileDockItems.map((item) => {
-            const ActiveIcon = item.icon;
-            const isActive = activeDockSection === item.id;
-
-            return (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className={`relative inline-flex flex-col items-center gap-1 rounded-xl py-1 text-[11px] font-semibold transition-colors ${
-                  isActive
-                    ? "text-accent"
-                    : "text-text-secondary hover:bg-accent-soft hover:text-text-primary"
-                }`}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="mobile-dock-pill"
-                    className="absolute inset-0 -z-10 rounded-xl bg-accent/15"
-                    transition={{ type: "spring", stiffness: 260, damping: 28 }}
-                  />
-                )}
-                <ActiveIcon size={14} />
-                {item.label}
-              </a>
-            );
-          })}
-        </div>
-      </div>
 
     </main>
   );
