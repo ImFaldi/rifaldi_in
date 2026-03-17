@@ -1265,12 +1265,15 @@ export function DashboardClient() {
   }
 
   return (
-    <main className="min-h-screen scroll-smooth bg-bg-primary text-text-primary px-4 py-8 sm:px-6 lg:px-6">
+    <main className="dashboard-atmosphere relative min-h-screen scroll-smooth overflow-x-hidden px-4 py-8 text-text-primary sm:px-6 lg:px-6">
+      <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-sky-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-24 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
+
       <div className="mx-auto w-full max-w-[1560px] lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-4 xl:grid-cols-[230px_minmax(0,1fr)] xl:gap-6">
-        <aside className="h-fit rounded-3xl border border-border bg-linear-to-b from-bg-card via-bg-card to-accent-soft/20 p-4 shadow-sm sm:p-5 lg:sticky lg:top-6">
+        <aside className="dashboard-panel dashboard-sidebar-shell order-2 h-fit rounded-3xl border border-border p-4 sm:p-5 lg:order-1 lg:sticky lg:top-6">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary">{text.navTitle}</p>
 
-          <div className="mt-3 rounded-xl border border-border bg-bg-primary/65 p-3">
+          <div className="dashboard-progress-card mt-3 rounded-xl border border-border bg-bg-primary/65 p-3">
             <div className="flex items-center justify-between text-[11px] font-semibold text-text-secondary">
               <span>{text.navProgress}</span>
               <span>{navProgressPercent}%</span>
@@ -1286,7 +1289,7 @@ export function DashboardClient() {
             </p>
           </div>
 
-          <nav className="mt-3 space-y-1.5">
+          <nav className="dashboard-side-nav mt-3 space-y-1.5">
             {navItems.map((item) => {
               const isActive = item.id === activeSection;
               return (
@@ -1294,20 +1297,23 @@ export function DashboardClient() {
                   key={item.id}
                   href={`#${item.id}`}
                   onClick={(event) => handleNavClick(event, item.id)}
-                  className={`flex items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold transition-all duration-200 ${
+                  className={`dashboard-side-link flex items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold transition-all duration-200 ${
                     isActive
-                      ? "border-accent/50 bg-accent/15 text-accent shadow-sm"
+                      ? "dashboard-side-link--active border-accent/50 bg-accent/15 text-accent shadow-sm"
                       : "border-border text-text-secondary hover:bg-accent-soft hover:text-text-primary"
                   }`}
                 >
                   <span>{item.label}</span>
-                  <ChevronRight size={13} className={isActive ? "opacity-100" : "opacity-50"} />
+                  <ChevronRight
+                    size={13}
+                    className={`dashboard-side-chevron ${isActive ? "opacity-100" : "opacity-50"}`}
+                  />
                 </a>
               );
             })}
           </nav>
 
-          <div className="mt-4 rounded-xl border border-border bg-bg-primary/60 p-3">
+          <div className="dashboard-quick-card mt-4 rounded-xl border border-border bg-bg-primary/60 p-3">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-text-secondary">{text.quickAccess}</p>
             <p className="mt-2 text-xs text-text-secondary">{text.emailLabel}</p>
             <p className="text-xs font-semibold break-all">{sessionUser?.email || "-"}</p>
@@ -1316,8 +1322,8 @@ export function DashboardClient() {
           </div>
         </aside>
 
-        <div className="mt-6 space-y-6 lg:mt-0">
-        <header id="section-overview" className="rounded-3xl border border-border bg-linear-to-br from-bg-card via-bg-card to-accent-soft/30 p-6 shadow-sm sm:p-8">
+        <div className="order-1 mt-6 space-y-6 lg:order-2 lg:mt-0">
+        <header id="section-overview" className="dashboard-panel rounded-3xl border border-border p-6 sm:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-secondary">{text.adminControl}</p>
@@ -1328,9 +1334,13 @@ export function DashboardClient() {
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              <LanguageToggle />
-              <ThemeToggle />
+            <div className="dashboard-header-toolbar">
+              <div className="dashboard-pref-group">
+                <LanguageToggle />
+                <ThemeToggle />
+              </div>
+
+              <div className="dashboard-quick-actions">
               <button
                 type="button"
                 onClick={() => {
@@ -1341,7 +1351,7 @@ export function DashboardClient() {
                   });
                   router.push("/");
                 }}
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold hover:bg-accent-soft transition-colors"
+                className="dashboard-action-btn"
               >
                 <House size={15} />
                 {text.backToLanding}
@@ -1356,7 +1366,7 @@ export function DashboardClient() {
                   });
                   router.push("/dashboard/analytics");
                 }}
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold hover:bg-accent-soft transition-colors"
+                className="dashboard-action-btn"
               >
                 <BarChart3 size={15} />
                 {text.analyticsConsole}
@@ -1370,7 +1380,7 @@ export function DashboardClient() {
                   });
                   setRefreshTick((value) => value + 1);
                 }}
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold hover:bg-accent-soft transition-colors"
+                className="dashboard-action-btn dashboard-action-btn--primary"
               >
                 <RefreshCw size={15} />
                 {text.refresh}
@@ -1384,11 +1394,12 @@ export function DashboardClient() {
                   });
                   void handleLogout();
                 }}
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold text-red-500 hover:bg-red-500/10 transition-colors"
+                className="dashboard-action-btn dashboard-action-btn--danger"
               >
                 <LogOut size={15} />
                 {text.logout}
               </button>
+              </div>
             </div>
           </div>
 
@@ -1420,7 +1431,7 @@ export function DashboardClient() {
           </div>
         </header>
 
-        <section id="section-resource" className="rounded-2xl border border-border bg-bg-card p-4 sm:p-5">
+        <section id="section-resource" className="dashboard-panel rounded-2xl border border-border p-4 sm:p-5">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-secondary">{text.resourceSwitch}</p>
           <div className="flex flex-wrap gap-2">
             {(Object.keys(RESOURCE_META) as ResourceName[]).map((name) => {
@@ -1448,7 +1459,7 @@ export function DashboardClient() {
         </section>
 
         <section className="space-y-6">
-            <section id="section-data" className="rounded-2xl border border-border bg-bg-card p-5 sm:p-6">
+            <section id="section-data" className="dashboard-panel rounded-2xl border border-border p-5 sm:p-6">
               <div className="space-y-3">
                 <div className="rounded-2xl border border-border bg-linear-to-br from-bg-primary via-bg-primary to-accent-soft/25 p-3 sm:p-4">
                   <div id="section-editor" className="flex flex-col gap-3">
