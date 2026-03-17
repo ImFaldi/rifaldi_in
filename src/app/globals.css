@@ -203,6 +203,87 @@ body {
   position: relative;
 }
 
+.hero-portrait-frame {
+  position: relative;
+  border: 1px solid color-mix(in oklab, var(--accent) 34%, transparent);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in oklab, var(--accent) 24%, transparent) 0%,
+      color-mix(in oklab, #22d3ee 12%, transparent) 42%,
+      transparent 78%
+    ),
+    color-mix(in oklab, var(--bg-card) 60%, transparent);
+  box-shadow:
+    0 26px 56px rgba(5, 10, 26, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.hero-ambient-glow {
+  opacity: 0.36;
+  transform: scale(1.06);
+  background: radial-gradient(circle at 56% 36%, rgba(99, 102, 241, 0.64), rgba(34, 211, 238, 0.2) 40%, transparent 70%);
+}
+
+.hero-ambient-beam {
+  opacity: 0.24;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent 0%, rgba(99, 102, 241, 0.36) 24%, rgba(34, 211, 238, 0.4) 53%, rgba(99, 102, 241, 0.28) 76%, transparent 100%);
+  filter: blur(28px);
+}
+
+.hero-portrait-image {
+  transform: scale(1.02);
+  transition: transform 0.45s ease;
+}
+
+.hero-portrait-shell:hover .hero-portrait-image {
+  transform: scale(1.055);
+}
+
+.hero-portrait-grain {
+  opacity: 0.12;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.34) 0.4px, transparent 0.4px);
+  background-size: 2.2px 2.2px;
+}
+
+.hero-scanline {
+  opacity: 0.18;
+  mix-blend-mode: screen;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.14) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    rgba(0, 0, 0, 0.01) 2px,
+    rgba(0, 0, 0, 0) 3px
+  );
+  background-size: 100% 3px;
+}
+
+.hero-camera-badge {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(135deg, rgba(9, 16, 38, 0.65), rgba(54, 46, 132, 0.34));
+  box-shadow: 0 8px 22px rgba(7, 12, 30, 0.36);
+  backdrop-filter: blur(10px);
+}
+
+.hero-trust-chip {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(130deg, rgba(3, 16, 24, 0.65), rgba(47, 37, 125, 0.32));
+  box-shadow: 0 8px 20px rgba(7, 12, 30, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.hero-floating-kpi {
+  border-color: color-mix(in oklab, var(--accent) 40%, rgba(255, 255, 255, 0.2));
+  background:
+    linear-gradient(145deg, color-mix(in oklab, var(--accent) 15%, transparent), transparent 58%),
+    var(--bg-card);
+  box-shadow:
+    0 14px 28px rgba(6, 12, 32, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
 .hero-portrait-shell::before {
   content: "";
   position: absolute;
@@ -224,6 +305,26 @@ body {
     radial-gradient(circle at 24% 16%, rgba(255, 255, 255, 0.1), transparent 34%),
     radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.08), transparent 30%),
     radial-gradient(circle at 50% 88%, rgba(0, 0, 0, 0.55), transparent 52%);
+}
+
+.dark .hero-ambient-glow {
+  opacity: 0.5;
+}
+
+.dark .hero-portrait-grain {
+  opacity: 0.08;
+}
+
+@media (max-width: 640px) {
+  .hero-portrait-frame {
+    border-radius: 1.5rem;
+    padding: 0.45rem;
+  }
+
+  .hero-ambient-glow {
+    opacity: 0.26;
+    transform: scale(1.02);
+  }
 }
 
 /* Custom cursor hanya aktif di device non-touch (mouse/trackpad) */

@@ -18,6 +18,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
@@ -43,6 +45,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: googleSiteVerification
+    ? {
+        google: googleSiteVerification,
+      }
+    : undefined,
   openGraph: {
     title: "Rifaldi - Full Stack and Mobile Developer",
     description:
@@ -125,6 +132,7 @@ const structuredData = {
       "@type": "Person",
       "@id": `${SITE_URL}/#person`,
       name: "Rifaldi",
+      alternateName: ["rifaldi", "Rifaldi Developer"],
       url: `${SITE_URL}/`,
       image: `${SITE_URL}/images/profile.jpg`,
       jobTitle: "Full Stack & Mobile Developer",
@@ -144,7 +152,8 @@ const structuredData = {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: `${SITE_URL}/`,
-      name: "Rifaldi Portfolio",
+      name: SITE_NAME,
+      alternateName: "Rifaldi",
       publisher: {
         "@id": `${SITE_URL}/#organization`,
       },
@@ -159,9 +168,12 @@ const structuredData = {
       "@type": "ProfilePage",
       "@id": `${SITE_URL}/#profile-page`,
       url: `${SITE_URL}/`,
-      name: "Rifaldi â€” Full Stack & Mobile Developer",
+      name: "Rifaldi - Full Stack & Mobile Developer",
       isPartOf: {
         "@id": `${SITE_URL}/#website`,
+      },
+      mainEntity: {
+        "@id": `${SITE_URL}/#person`,
       },
       about: {
         "@id": `${SITE_URL}/#person`,

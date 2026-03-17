@@ -22,6 +22,7 @@ import {
   Quote,
   Rocket,
   Timer,
+  ShieldCheck,
 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ProjectCard, type Project } from "@/components/ui/ProjectCard";
@@ -454,33 +455,62 @@ export default function HomePage() {
             }
           >
             <div className="relative w-full max-w-sm">
-              <div className="absolute inset-0 z-0 rounded-3xl blur-3xl opacity-25 bg-linear-to-br from-accent to-violet-500 scale-110 pointer-events-none" />
+              <div className="hero-ambient-glow absolute inset-0 z-0 rounded-[2rem] blur-3xl pointer-events-none" />
+              <div className="hero-ambient-beam pointer-events-none absolute -inset-x-2 top-1/2 z-0 h-24 -translate-y-1/2" />
 
-              <div className="hero-portrait-shell relative z-10 rounded-3xl overflow-hidden border border-border glass-card">
-                <div className="relative h-[430px]">
+              <div className="hero-portrait-frame relative z-10 rounded-[2rem] p-2.5">
+                <div className="hero-portrait-shell relative overflow-hidden rounded-[1.55rem] border border-border glass-card">
+                  <div className="hero-camera-badge absolute left-3.5 top-3.5 z-30 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(74,222,128,0.95)]" />
+                    Live
+                  </div>
+
+                  <div className="absolute right-3.5 top-3.5 z-30 rounded-full border border-white/22 bg-black/30 px-2.5 py-1 text-[10px] font-semibold text-white/85 backdrop-blur-md">
+                    11/02/2026 23:06
+                  </div>
+
+                  <div className="relative h-[430px]">
                   <Image
                     src="/images/profile.jpg"
                     alt="Rifaldi"
                     fill
-                    className="object-cover object-top"
+                    className="hero-portrait-image object-cover object-top"
                     priority
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-white/20 via-white/0 to-transparent dark:from-white/10" />
-                  <div className="hero-vignette pointer-events-none absolute inset-0" />
-                  <div className="absolute inset-x-0 bottom-0 h-36 bg-linear-to-t from-black/70 to-transparent" />
-                  <div className="absolute bottom-14 left-5 right-5">
-                    <p className="text-white font-bold text-base leading-tight">Rifaldi Indrajaya S.Kom</p>
-                    <p className="text-white/70 text-xs mt-1">Full Stack Developer</p>
+                    <div className="hero-portrait-grain pointer-events-none absolute inset-0" />
+                    <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-white/20 via-white/0 to-transparent dark:from-white/10" />
+                    <div className="hero-vignette pointer-events-none absolute inset-0" />
+                    <div className="hero-scanline pointer-events-none absolute inset-0" />
+                    <div className="absolute inset-x-0 bottom-0 h-36 bg-linear-to-t from-black/75 to-transparent" />
+
+                    <div className="absolute bottom-6 left-5 right-5">
+                      <p className="text-white font-extrabold text-[1.05rem] leading-tight tracking-tight">
+                        Rifaldi Indrajaya S.Kom
+                      </p>
+                      <p className="mt-1 text-white/72 text-xs font-medium tracking-wide">
+                        Full Stack Developer
+                      </p>
+                    </div>
+
                   </div>
                 </div>
               </div>
 
               <motion.div
+                animate={prefersReducedMotion ? { opacity: 1 } : { y: [0, -4, 0] }}
+                transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
+                className="hero-trust-chip absolute -left-2 top-16 z-20 hidden items-center gap-2 rounded-full px-3 py-1.5 sm:flex"
+              >
+                <ShieldCheck size={13} className="text-emerald-300" />
+                <span className="text-[11px] font-semibold text-white/92">Verified Developer</span>
+              </motion.div>
+
+              <motion.div
                 animate={{ y: [0, -3, 0] }}
                 transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-x-3 bottom-10 z-20"
+                className="relative z-20 mt-3 px-1"
               >
-                <div className="glass-card flex items-center justify-between rounded-xl border border-border px-3 py-2">
+                <div className="hero-floating-kpi glass-card flex items-center justify-between rounded-xl border border-border px-3 py-2">
                   <div className="flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span className="text-xs font-semibold text-text-primary">{t.hero.floatingAvailable}</span>
