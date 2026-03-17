@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   AlertTriangle,
   Award,
+  BarChart3,
   House,
   Briefcase,
   ChevronRight,
@@ -361,6 +362,7 @@ export function DashboardClient() {
     workflow: "Workflow",
     workflowHint: isEn ? "Draft -> Review -> Published" : "Draft -> Review -> Published",
     backToLanding: isEn ? "Back to Landing" : "Kembali ke Landing",
+    analyticsConsole: isEn ? "Analytics Console" : "Analytics Console",
     refresh: isEn ? "Refresh Data" : "Refresh Data",
     logout: "Logout",
     autoTranslateLabel: isEn ? "Auto Translate" : "Auto Translate",
@@ -1343,6 +1345,21 @@ export function DashboardClient() {
               >
                 <House size={15} />
                 {text.backToLanding}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent("navigation_click", {
+                    nav_label: "analytics_console",
+                    nav_target: "/dashboard/analytics",
+                    location: "dashboard_header",
+                  });
+                  router.push("/dashboard/analytics");
+                }}
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold hover:bg-accent-soft transition-colors"
+              >
+                <BarChart3 size={15} />
+                {text.analyticsConsole}
               </button>
               <button
                 type="button"
