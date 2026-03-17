@@ -315,6 +315,34 @@ body {
   opacity: 0.08;
 }
 
+.analytics-atmosphere {
+  background:
+    radial-gradient(circle at 12% 10%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 30%),
+    radial-gradient(circle at 88% 16%, color-mix(in oklab, #22d3ee 18%, transparent), transparent 34%),
+    linear-gradient(180deg, color-mix(in oklab, var(--bg-primary) 92%, #0b1226 8%) 0%, var(--bg-primary) 100%);
+}
+
+.analytics-panel {
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in oklab, var(--accent) 9%, transparent) 0%,
+      color-mix(in oklab, #22d3ee 5%, transparent) 42%,
+      color-mix(in oklab, var(--bg-card) 82%, transparent) 100%
+    );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 18px 38px rgba(7, 12, 28, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.dark .analytics-panel {
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 @media (max-width: 640px) {
   .hero-portrait-frame {
     border-radius: 1.5rem;

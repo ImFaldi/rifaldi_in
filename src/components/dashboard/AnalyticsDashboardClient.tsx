@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BarChart3, Gauge, Tags, ArrowLeft } from "lucide-react";
+import { BarChart3, Gauge, Tags, ArrowLeft, Funnel, Sparkles } from "lucide-react";
 
 type ApiResponse = {
   range: string;
@@ -31,6 +31,22 @@ type ApiResponse = {
   };
 };
 
+type ReportPackResponse = {
+  generatedAt: string;
+  range: string;
+  propertyId: string;
+  funnel: {
+    lead_cta_click: number;
+    lead_contact_click: number;
+    cta_to_contact_rate_percent: number;
+    rows: Array<{ eventName: string; eventCount: number }>;
+  };
+  topSocialPlatform: Array<{ social_platform: string; eventCount: number }>;
+  topProjectAction: Array<{ project_action: string; eventCount: number }>;
+  dashboardUsage: Array<{ action_name: string; ui_location: string; eventCount: number }>;
+  topUiLocation: Array<{ ui_location: string; eventName: string; eventCount: number }>;
+};
+
 function formatNumber(value: number): string {
   return new Intl.NumberFormat("id-ID").format(value);
 }
@@ -39,6 +55,7 @@ export function AnalyticsDashboardClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ApiResponse | null>(null);
+  const [reportPack, setReportPack] = useState<ReportPackResponse | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -48,18 +65,36 @@ export function AnalyticsDashboardClient() {
       setError(null);
 
       try {
-        const response = await fetch("/api/analytics/overview", { cache: "no-store" });
-        const body = (await response.json().catch(() => null)) as ApiResponse | { message?: string } | null;
+        const [overviewResponse, reportResponse] = await Promise.all([
+          fetch("/api/analytics/overview", { cache: "no-store" }),
+          fetch("/api/analytics/report-pack", { cache: "no-store" }),
+        ]);
 
-        if (!response.ok) {
+        const overviewBody = (await overviewResponse.json().catch(() => null)) as ApiResponse | { message?: string } | null;
+        const reportBody = (await reportResponse.json().catch(() => null)) as
+          | ReportPackResponse
+          | { message?: string }
+          | null;
+
+        if (!overviewResponse.ok) {
           if (!mounted) return;
-          setError(body && "message" in body ? body.message || "Gagal memuat analytics." : "Gagal memuat analytics.");
+          setError(
+            overviewBody && "message" in overviewBody
+              ? overviewBody.message || "Gagal memuat analytics."
+              : "Gagal memuat analytics."
+          );
           setLoading(false);
           return;
         }
 
         if (!mounted) return;
-        setData(body as ApiResponse);
+        setData(overviewBody as ApiResponse);
+
+        if (reportResponse.ok) {
+          setReportPack(reportBody as ReportPackResponse);
+        } else {
+          setReportPack(null);
+        }
       } catch {
         if (!mounted) return;
         setError("Terjadi kesalahan jaringan saat mengambil analytics.");
@@ -85,9 +120,12 @@ export function AnalyticsDashboardClient() {
   }, [data]);
 
   return (
-    <main className="min-h-screen bg-bg-primary px-4 py-8 text-text-primary sm:px-6">
+    <main className="analytics-atmosphere relative min-h-screen overflow-hidden px-4 py-8 text-text-primary sm:px-6">
+      <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-cyan-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-24 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
+
       <div className="mx-auto w-full max-w-6xl space-y-6">
-        <header className="rounded-3xl border border-border bg-bg-card p-6 shadow-sm">
+        <header className="analytics-panel rounded-3xl border border-border p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-secondary">Analytics Console</p>
@@ -99,7 +137,7 @@ export function AnalyticsDashboardClient() {
 
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-primary px-4 py-2 text-sm font-semibold hover:bg-accent-soft"
+              className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-primary/80 px-4 py-2 text-sm font-semibold hover:bg-accent-soft"
             >
               <ArrowLeft size={15} /> Kembali ke Dashboard
             </Link>
@@ -107,7 +145,7 @@ export function AnalyticsDashboardClient() {
         </header>
 
         {loading ? (
-          <section className="rounded-3xl border border-border bg-bg-card p-6 text-sm text-text-secondary">
+          <section className="analytics-panel rounded-3xl border border-border p-6 text-sm text-text-secondary">
             Memuat data analytics...
           </section>
         ) : error ? (
@@ -116,7 +154,7 @@ export function AnalyticsDashboardClient() {
           </section>
         ) : data ? (
           <>
-            <section className="rounded-3xl border border-border bg-bg-card p-6">
+            <section className="analytics-panel rounded-3xl border border-border p-6">
               <div className="mb-4 flex flex-wrap items-center gap-3">
                 <Gauge size={16} className="text-accent" />
                 <p className="text-sm font-semibold">Ringkasan GA4 ({data.range})</p>
@@ -127,7 +165,7 @@ export function AnalyticsDashboardClient() {
 
               <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                 {summaryCards.map((item) => (
-                  <article key={item.label} className="rounded-2xl border border-border bg-bg-primary p-4">
+                  <article key={item.label} className="rounded-2xl border border-border bg-bg-primary/75 p-4">
                     <p className="text-xs text-text-secondary">{item.label}</p>
                     <p className="mt-1 text-xl font-extrabold text-accent">{item.value}</p>
                   </article>
@@ -136,7 +174,7 @@ export function AnalyticsDashboardClient() {
             </section>
 
             <section className="grid gap-6 lg:grid-cols-2">
-              <article className="rounded-3xl border border-border bg-bg-card p-6">
+              <article className="analytics-panel rounded-3xl border border-border p-6">
                 <div className="mb-4 inline-flex items-center gap-2 text-sm font-semibold">
                   <BarChart3 size={16} className="text-accent" />
                   Top Pages
@@ -146,7 +184,7 @@ export function AnalyticsDashboardClient() {
                     data.ga4.topPages.map((item) => (
                       <div
                         key={item.path}
-                        className="flex items-center justify-between rounded-xl border border-border bg-bg-primary px-3 py-2"
+                        className="flex items-center justify-between rounded-xl border border-border bg-bg-primary/75 px-3 py-2"
                       >
                         <span className="max-w-[75%] truncate text-sm">{item.path}</span>
                         <span className="text-sm font-bold text-accent">{formatNumber(item.views)}</span>
@@ -158,7 +196,7 @@ export function AnalyticsDashboardClient() {
                 </div>
               </article>
 
-              <article className="rounded-3xl border border-border bg-bg-card p-6">
+              <article className="analytics-panel rounded-3xl border border-border p-6">
                 <div className="mb-4 inline-flex items-center gap-2 text-sm font-semibold">
                   <BarChart3 size={16} className="text-accent" />
                   Top Events
@@ -168,7 +206,7 @@ export function AnalyticsDashboardClient() {
                     data.ga4.topEvents.map((item) => (
                       <div
                         key={item.name}
-                        className="flex items-center justify-between rounded-xl border border-border bg-bg-primary px-3 py-2"
+                        className="flex items-center justify-between rounded-xl border border-border bg-bg-primary/75 px-3 py-2"
                       >
                         <span className="text-sm">{item.name}</span>
                         <span className="text-sm font-bold text-accent">{formatNumber(item.count)}</span>
@@ -181,7 +219,89 @@ export function AnalyticsDashboardClient() {
               </article>
             </section>
 
-            <section className="rounded-3xl border border-border bg-bg-card p-6">
+            {reportPack ? (
+              <section className="analytics-panel rounded-3xl border border-border p-6">
+                <div className="mb-4 inline-flex items-center gap-2 text-sm font-semibold">
+                  <Funnel size={16} className="text-accent" />
+                  Report Pack
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                  <article className="rounded-2xl border border-border bg-bg-primary/75 p-4">
+                    <p className="text-xs text-text-secondary">Lead CTA</p>
+                    <p className="mt-1 text-xl font-black text-accent">{formatNumber(reportPack.funnel.lead_cta_click)}</p>
+                  </article>
+                  <article className="rounded-2xl border border-border bg-bg-primary/75 p-4">
+                    <p className="text-xs text-text-secondary">Lead Contact</p>
+                    <p className="mt-1 text-xl font-black text-accent">{formatNumber(reportPack.funnel.lead_contact_click)}</p>
+                  </article>
+                  <article className="rounded-2xl border border-border bg-bg-primary/75 p-4">
+                    <p className="text-xs text-text-secondary">CTA to Contact Rate</p>
+                    <p className="mt-1 text-xl font-black text-accent">{reportPack.funnel.cta_to_contact_rate_percent}%</p>
+                  </article>
+                </div>
+
+                <div className="mt-4 grid gap-4 lg:grid-cols-3">
+                  <article className="rounded-2xl border border-border bg-bg-primary/75 p-4">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary">Top Social Platform</p>
+                    <div className="space-y-2">
+                      {reportPack.topSocialPlatform.length ? (
+                        reportPack.topSocialPlatform.map((item) => (
+                          <div key={`${item.social_platform}-${item.eventCount}`} className="flex items-center justify-between text-sm">
+                            <span>{item.social_platform || "(not set)"}</span>
+                            <span className="font-bold text-accent">{formatNumber(item.eventCount)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-sm text-text-secondary">Belum ada data.</p>
+                      )}
+                    </div>
+                  </article>
+
+                  <article className="rounded-2xl border border-border bg-bg-primary/75 p-4">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary">Top Project Action</p>
+                    <div className="space-y-2">
+                      {reportPack.topProjectAction.length ? (
+                        reportPack.topProjectAction.map((item) => (
+                          <div key={`${item.project_action}-${item.eventCount}`} className="flex items-center justify-between text-sm">
+                            <span>{item.project_action || "(not set)"}</span>
+                            <span className="font-bold text-accent">{formatNumber(item.eventCount)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-sm text-text-secondary">Belum ada data.</p>
+                      )}
+                    </div>
+                  </article>
+
+                  <article className="rounded-2xl border border-border bg-bg-primary/75 p-4">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary">Dashboard Usage</p>
+                    <div className="space-y-2">
+                      {reportPack.dashboardUsage.length ? (
+                        reportPack.dashboardUsage.slice(0, 6).map((item) => (
+                          <div
+                            key={`${item.action_name}-${item.ui_location}-${item.eventCount}`}
+                            className="flex items-center justify-between text-sm"
+                          >
+                            <span className="truncate pr-2">{item.action_name || "(not set)"}</span>
+                            <span className="font-bold text-accent">{formatNumber(item.eventCount)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-sm text-text-secondary">Belum ada data.</p>
+                      )}
+                    </div>
+                  </article>
+                </div>
+
+                <p className="mt-4 inline-flex items-center gap-2 text-xs text-text-secondary">
+                  <Sparkles size={13} className="text-accent" />
+                  Report pack dibuat otomatis untuk 30 hari terakhir.
+                </p>
+              </section>
+            ) : null}
+
+            <section className="analytics-panel rounded-3xl border border-border p-6">
               <div className="mb-4 inline-flex items-center gap-2 text-sm font-semibold">
                 <Tags size={16} className="text-accent" />
                 Google Tag Manager
@@ -202,7 +322,7 @@ export function AnalyticsDashboardClient() {
                       data.gtm.tags.map((tag) => (
                         <div
                           key={`${tag.name}-${tag.type}`}
-                          className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-bg-primary px-3 py-2"
+                          className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-bg-primary/75 px-3 py-2"
                         >
                           <div>
                             <p className="text-sm font-semibold">{tag.name}</p>

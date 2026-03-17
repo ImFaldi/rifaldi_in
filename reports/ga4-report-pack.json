@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-03-17T16:00:43.147Z",
+  "range": "30 hari terakhir",
+  "propertyId": "528802265",
+  "funnel": {
+    "lead_cta_click": 0,
+    "lead_contact_click": 0,
+    "cta_to_contact_rate_percent": 0,
+    "rows": []
+  },
+  "topSocialPlatform": [],
+  "topProjectAction": [],
+  "dashboardUsage": [],
+  "topUiLocation": [
+    {
+      "ui_location": "",
+      "eventName": "page_view",
+      "eventCount": 16
+    },
+    {
+      "ui_location": "",
+      "eventName": "first_visit",
+      "eventCount": 3
+    },
+    {
+      "ui_location": "",
+      "eventName": "session_start",
+      "eventCount": 3
+    },
+    {
+      "ui_location": "",
+      "eventName": "navigation_click",
+      "eventCount": 2
+    },
+    {
+      "ui_location": "",
+      "eventName": "social_click",
+      "eventCount": 2
+    },
+    {
+      "ui_location": "",
+      "eventName": "user_engagement",
+      "eventCount": 2
+    },
+    {
+      "ui_location": "",
+      "eventName": "cta_click",
+      "eventCount": 1
+    },
+    {
+      "ui_location": "",
+      "eventName": "scroll",
+      "eventCount": 1
+    }
+  ]
+}
