@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   AlertTriangle,
   Award,
+  House,
   Briefcase,
   ChevronRight,
   CheckSquare,
@@ -358,6 +359,7 @@ export function DashboardClient() {
     selection: isEn ? "Selection" : "Pilihan",
     workflow: "Workflow",
     workflowHint: isEn ? "Draft -> Review -> Published" : "Draft -> Review -> Published",
+    backToLanding: isEn ? "Back to Landing" : "Kembali ke Landing",
     refresh: isEn ? "Refresh Data" : "Refresh Data",
     logout: "Logout",
     autoTranslateLabel: isEn ? "Auto Translate" : "Auto Translate",
@@ -1326,6 +1328,14 @@ export function DashboardClient() {
             <div className="flex flex-wrap gap-2">
               <LanguageToggle />
               <ThemeToggle />
+              <button
+                type="button"
+                onClick={() => router.push("/")}
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold hover:bg-accent-soft transition-colors"
+              >
+                <House size={15} />
+                {text.backToLanding}
+              </button>
               <button
                 type="button"
                 onClick={() => setRefreshTick((value) => value + 1)}
