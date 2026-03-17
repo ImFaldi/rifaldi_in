@@ -31,6 +31,7 @@ import {
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { trackEvent } from "@/lib/analytics";
 
 type ResourceName = "experiences" | "certifications" | "projects" | "educations" | "blogs";
 type WorkflowStatus = "draft" | "review" | "published";
@@ -1330,7 +1331,14 @@ export function DashboardClient() {
               <ThemeToggle />
               <button
                 type="button"
-                onClick={() => router.push("/")}
+                onClick={() => {
+                  trackEvent("navigation_click", {
+                    nav_label: "back_to_landing",
+                    nav_target: "/",
+                    location: "dashboard_header",
+                  });
+                  router.push("/");
+                }}
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold hover:bg-accent-soft transition-colors"
               >
                 <House size={15} />
@@ -1338,7 +1346,13 @@ export function DashboardClient() {
               </button>
               <button
                 type="button"
-                onClick={() => setRefreshTick((value) => value + 1)}
+                onClick={() => {
+                  trackEvent("dashboard_action", {
+                    action_name: "refresh_data",
+                    location: "dashboard_header",
+                  });
+                  setRefreshTick((value) => value + 1);
+                }}
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold hover:bg-accent-soft transition-colors"
               >
                 <RefreshCw size={15} />
@@ -1346,7 +1360,13 @@ export function DashboardClient() {
               </button>
               <button
                 type="button"
-                onClick={handleLogout}
+                onClick={() => {
+                  trackEvent("dashboard_action", {
+                    action_name: "logout",
+                    location: "dashboard_header",
+                  });
+                  void handleLogout();
+                }}
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card px-4 py-2 text-sm font-semibold text-red-500 hover:bg-red-500/10 transition-colors"
               >
                 <LogOut size={15} />

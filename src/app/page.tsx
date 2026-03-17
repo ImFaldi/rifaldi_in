@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowUpRight,
   Mail,
@@ -32,6 +33,7 @@ import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { CertSection } from "@/components/sections/CertSection";
 import { SitePageNav } from "@/components/layout/SitePageNav";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { trackEvent } from "@/lib/analytics";
 import { SOCIAL } from "@/lib/social";
 import { type GithubRepo, REPO_GRADIENTS, formatRepoName } from "@/lib/github";
 
@@ -73,6 +75,7 @@ const cinematicSection = {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
+  const router = useRouter();
   const { t, lang } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const [showPreloader, setShowPreloader] = useState(true);
@@ -419,13 +422,28 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div custom={4} variants={fadeUp} className="flex flex-wrap gap-3 mb-8">
-              <MagneticButton>
+              <MagneticButton
+                onClick={() => {
+                  trackEvent("cta_click", {
+                    cta_name: "hero_contact",
+                    cta_text: t.hero.ctaContact,
+                    location: "hero",
+                  });
+                  router.push("/contact");
+                }}
+              >
                 <Mail size={15} />
                 {t.hero.ctaContact}
               </MagneticButton>
               <a
                 href="/cv.pdf"
                 download
+                onClick={() =>
+                  trackEvent("file_download", {
+                    file_name: "cv.pdf",
+                    location: "hero",
+                  })
+                }
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border border-border text-text-primary hover:bg-accent-soft transition-colors"
               >
                 <Download size={15} />
@@ -617,6 +635,12 @@ export default function HomePage() {
             href={SOCIAL.github}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              trackEvent("social_click", {
+                platform: "github",
+                location: "projects_header",
+              })
+            }
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:gap-3 transition-all duration-200 shrink-0"
           >
             {t.projects.viewAll} <ArrowUpRight size={15} />
@@ -663,6 +687,12 @@ export default function HomePage() {
               href={SOCIAL.github}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent("social_click", {
+                  platform: "github",
+                  location: "projects_empty_state",
+                })
+              }
               className="mt-5 inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-semibold text-text-primary hover:bg-accent-soft"
             >
               {lang === "en" ? "Open GitHub" : "Buka GitHub"} <ArrowUpRight size={14} />
@@ -712,6 +742,13 @@ export default function HomePage() {
                 href={showcaseProject.repo ?? showcaseProject.href ?? SOCIAL.github}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent("project_click", {
+                    project_name: showcaseProject.title,
+                    click_target: showcaseProject.repo ? "repo" : showcaseProject.href ? "demo" : "github_fallback",
+                    location: "mini_case_study",
+                  })
+                }
                 className="rounded-xl border border-border bg-accent px-3 py-3 text-center text-sm font-bold text-white hover:opacity-90"
               >
                 {lang === "en" ? "View Details" : "Lihat Detail"}
@@ -882,6 +919,12 @@ export default function HomePage() {
               <div className="flex flex-col gap-3 mt-6">
                 <a
                   href={SOCIAL.mailto}
+                  onClick={() =>
+                    trackEvent("contact_click", {
+                      contact_method: "email",
+                      location: "contact_card",
+                    })
+                  }
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-accent text-white hover:opacity-90 transition-opacity"
                 >
                   <Mail size={15} />
@@ -891,6 +934,12 @@ export default function HomePage() {
                   href={SOCIAL.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    trackEvent("social_click", {
+                      platform: "linkedin",
+                      location: "contact_card",
+                    })
+                  }
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border border-border text-text-primary hover:bg-accent-soft transition-colors"
                 >
                   <Linkedin size={15} />
@@ -916,10 +965,22 @@ export default function HomePage() {
           </p>
           <div className="flex items-center gap-4">
             <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent("social_click", {
+                  platform: "github",
+                  location: "footer",
+                })
+              }
               className="text-text-secondary hover:text-accent transition-colors">
               <Github size={16} />
             </a>
             <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent("social_click", {
+                  platform: "linkedin",
+                  location: "footer",
+                })
+              }
               className="text-text-secondary hover:text-accent transition-colors">
               <Linkedin size={16} />
             </a>
@@ -929,6 +990,12 @@ export default function HomePage() {
 
       <motion.a
         href="/auth"
+        onClick={() =>
+          trackEvent("cta_click", {
+            cta_name: "open_dashboard",
+            location: "floating_button",
+          })
+        }
         initial={{ opacity: 0, y: 14 }}
         animate={{
           opacity: shouldShowFloatingDashboard ? 1 : 0,

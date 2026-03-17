@@ -199,6 +199,8 @@ Isi file `.env.local`:
 ```bash
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 GOOGLE_SITE_VERIFICATION=your_google_search_console_token
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 SUPABASE_URL=https://YOUR-PROJECT.supabase.co

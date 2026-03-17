@@ -7,6 +7,7 @@ import { ChevronRight, Menu, X } from "lucide-react";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { trackEvent } from "@/lib/analytics";
 
 export function SitePageNav() {
   const pathname = usePathname();
@@ -36,7 +37,17 @@ export function SitePageNav() {
   return (
     <nav className="fixed inset-x-0 top-4 z-50 px-4 sm:px-6">
       <div className="premium-nav-shell mx-auto grid w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center rounded-2xl border border-border bg-bg-card/80 px-4 py-2.5 backdrop-blur-xl sm:px-5 sm:py-3">
-        <Link href="/" className="font-bold text-lg tracking-tight text-text-primary">
+        <Link
+          href="/"
+          onClick={() =>
+            trackEvent("navigation_click", {
+              nav_label: "brand_logo",
+              nav_target: "/",
+              location: "top_nav",
+            })
+          }
+          className="font-bold text-lg tracking-tight text-text-primary"
+        >
           rifaldi<span className="text-accent">.</span>
         </Link>
 
@@ -47,6 +58,13 @@ export function SitePageNav() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() =>
+                  trackEvent("navigation_click", {
+                    nav_label: item.label,
+                    nav_target: item.href,
+                    location: "top_nav",
+                  })
+                }
                 className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
                   active ? "bg-accent-soft text-text-primary" : "text-text-secondary hover:text-text-primary"
                 }`}
@@ -64,7 +82,14 @@ export function SitePageNav() {
             type="button"
             aria-label={mobileMenuOpen ? ui.closeMenu : ui.openMenu}
             aria-expanded={mobileMenuOpen}
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            onClick={() => {
+              const next = !mobileMenuOpen;
+              setMobileMenuOpen(next);
+              trackEvent("ui_interaction", {
+                interaction_name: "mobile_menu_toggle",
+                state: next ? "open" : "close",
+              });
+            }}
             className="premium-menu-trigger inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-bg-card/70 text-text-primary transition-colors hover:bg-accent-soft md:hidden"
           >
             {mobileMenuOpen ? <X size={17} /> : <Menu size={17} />}
@@ -82,7 +107,12 @@ export function SitePageNav() {
         <button
           type="button"
           aria-label={ui.closeOverlay}
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={() => {
+            setMobileMenuOpen(false);
+            trackEvent("ui_interaction", {
+              interaction_name: "mobile_menu_overlay_close",
+            });
+          }}
           className="absolute inset-0 h-full w-full bg-black/45"
         />
 
@@ -105,7 +135,14 @@ export function SitePageNav() {
                 <Link
                   key={`sheet-${item.href}`}
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    trackEvent("navigation_click", {
+                      nav_label: item.label,
+                      nav_target: item.href,
+                      location: "mobile_nav",
+                    });
+                  }}
                   className={`group flex items-center justify-between rounded-2xl border px-3.5 py-3 text-sm font-semibold transition-all duration-200 ${
                     active
                       ? "border-accent/30 bg-accent-soft text-text-primary"

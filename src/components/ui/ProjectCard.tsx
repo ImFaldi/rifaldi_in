@@ -10,6 +10,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 export interface Project {
   title: string;
@@ -181,6 +182,13 @@ export function ProjectCard({ project, index = 0, featured = false, labels }: Pr
                 href={project.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent("project_click", {
+                    project_name: project.title,
+                    click_target: "live_demo",
+                    location: featured ? "project_card_featured" : "project_card",
+                  })
+                }
                 className="flex items-center gap-1.5 text-xs text-accent font-semibold hover:underline"
               >
                 <ExternalLink size={13} />
@@ -192,6 +200,13 @@ export function ProjectCard({ project, index = 0, featured = false, labels }: Pr
                 href={project.repo}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent("project_click", {
+                    project_name: project.title,
+                    click_target: "source_code",
+                    location: featured ? "project_card_featured" : "project_card",
+                  })
+                }
                 className="flex items-center gap-1.5 text-xs text-text-secondary font-semibold hover:text-accent transition-colors"
               >
                 <Github size={13} />
